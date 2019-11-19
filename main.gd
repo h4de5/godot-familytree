@@ -26,6 +26,8 @@ func _ready():
 	tree.addIndividual("I9", "Magdalena Müller", "11.11.1989", "", "Angestellte", "Graz", "f")
 	tree.addIndividual("I10", "Johannes Müller", "3.10.1992", "", "Student", "Graz", "m")
 	tree.addIndividual("I11", "Bernd Weber", "3.9.1981", "", "Angestellter", "Graz", "m")
+	tree.addIndividual("I12", "Käthe Wimmer", "4.2.1917", "", "Landwirtin", "Innsbruck", "f")
+	tree.addIndividual("I13", "Ernst Huber", "2.5.1913", "", "Landwirt", "Innsbruck", "m")
 
 	tree.listIndividuals();
 
@@ -33,6 +35,7 @@ func _ready():
 	tree.addFamily("F2", "I5", "I6", ["I3", "I9", "I10"], "", "Graz")
 	tree.addFamily("F3", "I7", "I8", ["I4"], "", "Wien")
 	tree.addFamily("F4", "I9", "I11", [], "", "Graz")
+	tree.addFamily("F5", "I12", "I13", ["I5"], "", "Innsbruck")
 
 	tree.listFamilies()
 
@@ -45,15 +48,39 @@ func _ready():
 	print(tree.to_string(tree.findParents("I4")))
 	print(tree.to_string(tree.findParents("I11")))
 
+	print(tree.to_string(tree.findSiblings("I3")))
+	print(tree.to_string(tree.findSiblings("I11")))
 
-	tree.poi = tree.findIndividual("I1")
+	print(tree.to_string(tree.findChildren("I3")))
+	print(tree.to_string(tree.findChildren("I11")))
+
+
+	tree.poi = tree.findIndividual("I3")
 
 
 	add_child(tree)
 
+
 	print("ende ready main")
 
-
+var delta_max = 0;
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+
+	if delta_max > 0:
+		delta_max -= delta
+
+	else:
+		delta_max = 2
+#		print("size ", get_viewport().size)
+#		print("rect_size ", get_node("Tree").rect_size)
+#		print("getBoundaries ", get_node("Tree").getBoundaries())
+		var boundaries = get_node("Tree").getBoundaries()
+
+		get_node("Camera2D").position = boundaries.position + boundaries.size / 2
+
+		var zoom = get_node("Tree").getBoundaries().size / get_viewport().size
+		zoom = Vector2(max(zoom.x,zoom.y), max(zoom.x,zoom.y))
+		get_node("Camera2D").zoom = zoom
+
+

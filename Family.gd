@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 var id = ""
 var husband = ""
@@ -14,7 +14,7 @@ func _ready():
 
 
 
-# used for building upfamilytree data
+# funcs used for building upfamilytree data
 
 func node_init(id, husband, wife, children, date, location):
 	self.id = id

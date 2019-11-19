@@ -2,10 +2,25 @@
 
 [ext_resource path="res://Individual.gd" type="Script" id=1]
 
-[node name="Individual" type="Node2D"]
+[node name="Individual" type="Control"]
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource( 1 )
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-margin_right = 227.0
-margin_bottom = 15.0
-text = "DEFAULT TEXT"
+[node name="Container" type="CenterContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+rect_min_size = Vector2( 250, 50 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Container"]
+margin_right = 250.0
+margin_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 250, 50 )
+text = "DEFAULT TEXT
+DEFAULT TEXT
+DEFAULT TEXT"
+scroll_active = false

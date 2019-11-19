@@ -2,5 +2,5 @@
 
 [ext_resource path="res://Family.gd" type="Script" id=1]
 
-[node name="Family" type="Node2D"]
+[node name="Family" type="Control"]
 script = ExtResource( 1 )

@@ -2,5 +2,5 @@
 
 [ext_resource path="res://Tree.gd" type="Script" id=1]
 
-[node name="Tree" type="Node2D"]
+[node name="Tree" type="Control"]
 script = ExtResource( 1 )

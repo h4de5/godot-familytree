@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 var id = ""
 var personname = ""
@@ -12,10 +12,18 @@ var image = ""
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("im ready individual")
-	get_node("RichTextLabel").text = to_string()
+	get_node("Container/RichTextLabel").push_align(RichTextLabel.ALIGN_CENTER)
+	get_node("Container/RichTextLabel").text = to_string()
 
 
-# used for building upfamilytree data
+# funcs used for visualization
+
+func getRect():
+	return Rect2(get_node("Container").rect_position, get_node("Container").rect_size)
+func getRectAbsolute():
+	return Rect2(rect_position + get_node("Container").rect_position, get_node("Container").rect_size)
+
+# funcs used for building upfamilytree data
 
 func node_init(id, personname, birth, death, occupation, location, gender, image):
 	self.id = id
@@ -28,7 +36,7 @@ func node_init(id, personname, birth, death, occupation, location, gender, image
 	self.image = image
 
 func to_string():
-	return "@"+ id.to_upper() + " - " + personname.capitalize() + " ["+ gender.to_upper() +"] ("+birth+" - "+death+") "+ occupation.capitalize() + " " + location.capitalize();
+	return "@"+ id.to_upper() + " - " + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
 
 # example data from GEDCOM
 #	0 @I17@ INDI
