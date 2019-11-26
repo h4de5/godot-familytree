@@ -2,8 +2,8 @@ extends Control
 
 #const Individual = preload("Individual.gd")
 #const Family = preload("Family.gd")
-const Individual = preload("res://Individual.tscn")
-const Family = preload("res://Family.tscn")
+const Individual = preload("res://code/Individual.tscn")
+const Family = preload("res://code/Family.tscn")
 
 var individuals = []
 var families = []

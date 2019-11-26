@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Tree.gd" type="Script" id=1]
+[ext_resource path="res://code/Tree.gd" type="Script" id=1]
 
 [node name="Tree" type="Control"]
 script = ExtResource( 1 )

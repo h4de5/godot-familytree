@@ -5,7 +5,7 @@ extends Node2D
 # each of those are individuals
 
 # const Tree = preload("Tree.gd")
-const Tree = preload("res://Tree.tscn")
+const Tree = preload("res://code/Tree.tscn")
 
 
 # Called when the node enters the scene tree for the first time.

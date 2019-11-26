@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://code/Branch.gd" type="Script" id=1]
+
+[node name="Branch" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_left = -99.0
+margin_top = -46.0
+margin_right = 201.0
+margin_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer"]
+margin_left = 150.0
+margin_right = 150.0
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2( -255.75, -99.3073 )
+scale = Vector2( 0.773514, 1 )
+points = PoolVector2Array( -2.05188, 57.3134, -2.05188, 113.089, 238.734, 110.368, 250.978, 145.738, 268.663, 110.368, 450.953, 110.368, 452.313, 57.3134 )
+texture_mode = 0
