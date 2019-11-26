@@ -6,3 +6,5 @@ export_presets.cfg
 
 # Mono-specific ignores
 .mono/
+# put your own family tree .ged file and images in here
+_familytree/*
