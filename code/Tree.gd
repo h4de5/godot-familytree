@@ -21,7 +21,7 @@ func _ready():
 
 		renderParents(poi.uid, -1)
 
-		renderSiblings(poi.uid, 0)
+#		renderSiblings(poi.uid, 0)
 		renderPartners(poi.uid, 0)
 
 		renderChildren(poi.uid, 1)
@@ -92,6 +92,10 @@ func getBoundaries():
 
 
 	return boundaries
+
+
+
+
 
 # funcs used for building upfamilytree data
 func newIndividual(fid):

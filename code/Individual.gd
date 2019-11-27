@@ -23,6 +23,10 @@ func getRect():
 func getRectAbsolute():
 	return Rect2(rect_position + get_node("Container").rect_position, get_node("Container").rect_size)
 
+
+
+
+
 # funcs used for building upfamilytree data
 
 func node_init(uid, personname, birth, death, occupation, location, gender, image):

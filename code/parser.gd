@@ -77,10 +77,10 @@ func parse(tree, filename):
 	_file.open(filename,1)
 
 	var _index = 0
-	var _started = false
 	var _cursorPos
 	var current_individual = null
 	var current_family = null
+	var current_group = null
 
 #	while !_file.eof_reached() && _index < 30:
 	while !_file.eof_reached():
@@ -100,30 +100,57 @@ func parse(tree, filename):
 			current_family = tree.newFamily(node_id)
 			current_individual = null
 
+		if _line.find("1 BIRT") == 0:
+			current_group = "birth"
+		elif _line.find("1 DEAT") == 0:
+			current_group = "birth"
+		elif _line.find("1 OBJE") == 0:
+			current_group = "image"
+		elif _line.find("1 MARR") == 0:
+			current_group = "marrige"
+		elif _line.find("1 ") == 0 or _line.find("0 ") == 0:
+			current_group = null
+
 
 
 		if current_individual != null:
 
 			if _line.find("1 NAME ") == 0:
-				tree.setIndividualField(current_individual, 'personname', lineval(_line))
+				tree.setIndividualField(current_individual, "personname", lineval(_line))
 			if _line.find("2 SURN ") == 0:
 				pass
 			if _line.find("2 GIVN ") == 0:
 				pass
 			if _line.find("1 OCCU ") == 0:
-				tree.setIndividualField(current_individual, 'occupation', lineval(_line))
+				tree.setIndividualField(current_individual, "occupation", lineval(_line))
 			if _line.find("1 SEX ") == 0:
-				tree.setIndividualField(current_individual, 'gender', lineval(_line))
+				tree.setIndividualField(current_individual, "gender", lineval(_line))
+
+			if _line.find("2 DATE ") == 0 && current_group == "birth":
+				tree.setIndividualField(current_individual, "birth", lineval(_line))
+			if _line.find("2 PLAC ") == 0 && current_group == "birth":
+				tree.setIndividualField(current_individual, "location", lineval(_line))
+
+			if _line.find("2 DATE ") == 0 && current_group == "death":
+				tree.setIndividualField(current_individual, "death", lineval(_line))
+
+			if _line.find("2 FILE ") == 0 && current_group == "image":
+				tree.setIndividualField(current_individual, "image", lineval(_line))
+			# 3 _ALTPATH .\Stammbaum Media\
+
 #			print(_line, " - ", current_individual, " | ",  tree.individuals[current_individual].to_string())
 
 		if current_family != null:
 			if _line.find("1 HUSB ") == 0:
-				tree.setFamilyField(current_family, 'husband', lineval(_line))
+				tree.setFamilyField(current_family, "husband", lineval(_line))
 			if _line.find("1 WIFE ") == 0:
-				tree.setFamilyField(current_family, 'wife', lineval(_line))
+				tree.setFamilyField(current_family, "wife", lineval(_line))
 			if _line.find("1 CHIL ") == 0:
-				tree.setFamilyField(current_family, 'children', lineval(_line))
-
+				tree.setFamilyField(current_family, "children", lineval(_line))
+			if _line.find("2 DATE ") == 0 && current_group == "marrige":
+				tree.setFamilyField(current_family, "date", lineval(_line))
+			if _line.find("2 PLAC ") == 0 && current_group == "marrige":
+				tree.setFamilyField(current_family, "location", lineval(_line))
 
 		_index += 1
 		_cursorPos = _file.get_position()
