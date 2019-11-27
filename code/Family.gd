@@ -1,6 +1,6 @@
 extends Control
 
-var id = ""
+var fid = ""
 var husband = ""
 var wife = ""
 var children = []
@@ -10,14 +10,14 @@ var location = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("im ready family")
-
+#	print("im ready family")
+	pass
 
 
 # funcs used for building upfamilytree data
 
-func node_init(id, husband, wife, children, date, location):
-	self.id = id
+func node_init(fid, husband, wife, children, date, location):
+	self.fid = fid
 	self.husband = husband
 	self.wife = wife
 	self.children = children
@@ -26,7 +26,7 @@ func node_init(id, husband, wife, children, date, location):
 
 
 func to_string():
-	return "@"+ id.to_upper() + " "+ husband.to_upper() +" and "+ wife.to_upper() +" ["+ date + " at "+ location.capitalize() + "] have " + PoolStringArray(children).join(", ")
+	return fid.to_upper() + " "+ husband.to_upper() +" and "+ wife.to_upper() +" ["+ date + " at "+ location.capitalize() + "] have " + PoolStringArray(children).join(", ")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

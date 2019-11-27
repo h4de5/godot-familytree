@@ -1,6 +1,6 @@
 extends Control
 
-var id = ""
+var uid = ""
 var personname = ""
 var birth = ""
 var death = ""
@@ -11,7 +11,7 @@ var image = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("im ready individual")
+#	print("im ready individual")
 	get_node("Container/RichTextLabel").push_align(RichTextLabel.ALIGN_CENTER)
 	get_node("Container/RichTextLabel").text = to_string()
 
@@ -25,8 +25,8 @@ func getRectAbsolute():
 
 # funcs used for building upfamilytree data
 
-func node_init(id, personname, birth, death, occupation, location, gender, image):
-	self.id = id
+func node_init(uid, personname, birth, death, occupation, location, gender, image):
+	self.uid = uid
 	self.personname = personname
 	self.birth = birth
 	self.death = death
@@ -36,7 +36,7 @@ func node_init(id, personname, birth, death, occupation, location, gender, image
 	self.image = image
 
 func to_string():
-	return "@"+ id.to_upper() + " - " + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
+	return  uid.to_upper() + " - " + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
 
 # example data from GEDCOM
 #	0 @I17@ INDI

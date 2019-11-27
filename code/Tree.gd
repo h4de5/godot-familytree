@@ -14,17 +14,17 @@ var level_counts = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("im ready tree")
+#	print("im ready tree")
 	if poi != null:
 		add_child(poi)
 		level_counts['level0'] = 0
 
-		renderParents(poi.id, -1)
+		renderParents(poi.uid, -1)
 
-		renderSiblings(poi.id, 0)
-		renderPartners(poi.id, 0)
+		renderSiblings(poi.uid, 0)
+		renderPartners(poi.uid, 0)
 
-		renderChildren(poi.id, 1)
+		renderChildren(poi.uid, 1)
 
 
 # funcs used for visualization
@@ -33,33 +33,37 @@ func renderParents(id, level):
 	var individuals = findParents(id)
 	if individuals:
 		for individual in individuals:
-			individual.rect_position = getFreePosition(level)
-			add_child(individual)
-			renderParents(individual.id, level-1)
+			if individual:
+				individual.rect_position = getFreePosition(level)
+				add_child(individual)
+				renderParents(individual.uid, level-1)
 
 func renderChildren(id, level):
 	var individuals = findChildren(id)
 	if individuals:
 		for individual in individuals:
-			individual.rect_position = getFreePosition(level)
-			add_child(individual)
-			renderChildren(individual.id, level+1)
+			if individual:
+				individual.rect_position = getFreePosition(level)
+				add_child(individual)
+				renderChildren(individual.uid, level+1)
 
 func renderPartners(id, level):
 	var individuals = findPartners(id)
 	if individuals:
 		for individual in individuals:
-			individual.rect_position = getFreePosition(level)
-			add_child(individual)
-#			renderPartners(individual.id, level+1)
+			if individual:
+				individual.rect_position = getFreePosition(level)
+				add_child(individual)
+	#			renderPartners(individual.uid, level+1)
 
 func renderSiblings(id, level):
 	var individuals = findSiblings(id)
 	if individuals:
 		for individual in individuals:
-			individual.rect_position = getFreePosition(level)
-			add_child(individual)
-#			renderSiblings(individual.id, level+1)
+			if individual:
+				individual.rect_position = getFreePosition(level)
+				add_child(individual)
+	#			renderSiblings(individual.uid, level+1)
 
 
 func getFreePosition(level):
@@ -90,28 +94,52 @@ func getBoundaries():
 	return boundaries
 
 # funcs used for building upfamilytree data
+func newIndividual(fid):
+	var node = Individual.instance();
+	node.uid = fid
+	individuals.append(node)
+	return individuals.size()-1
+
+func newFamily(fid):
+	var node = Family.instance();
+	node.fid = fid
+	families.append(node)
+	return families.size()-1
+
+func setIndividualField(index, field, value):
+	individuals[index][field] = value
+
+func setFamilyField(index, field, value):
+	if field == 'children':
+		if !families[index][field]:
+			families[index][field] = []
+		families[index][field].append(value)
+	else:
+		families[index][field] = value
 
 func addIndividual(id, personname, birth, death, occupation, location, gender):
 #	var node = Individual.new();
 	var node = Individual.instance();
 	node.node_init(id, personname, birth, death, occupation, location, gender, "")
 	individuals.append(node)
+	return individuals.size()-1
 
 func addFamily(id, husband, wife, children, date, location):
 #	var node = Family.new();
 	var node = Family.instance();
 	node.node_init(id, husband, wife, children, date, location)
 	families.append(node)
+	return families.size()-1
 
-func findIndividual(id):
+func findIndividual(uid):
 	for node in individuals:
-		if node.id == id:
+		if node.uid == uid:
 			return node
 	return null
 
 func findFamily(fid):
 	for node in families:
-		if node.id == fid:
+		if node.fid == fid:
 			return node
 	return null
 
@@ -136,7 +164,7 @@ func findSiblings(id):
 	if parents:
 		for parent in parents:
 			for node in families:
-				if node.husband == parent.id or node.wife == parent.id:
+				if node.husband == parent.uid or node.wife == parent.uid:
 					for child in node.children:
 						if child != id and not siblings.has(findIndividual(child)):
 							siblings.append(findIndividual(child))
