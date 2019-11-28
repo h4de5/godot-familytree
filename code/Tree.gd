@@ -16,27 +16,38 @@ var level_counts = {}
 func _ready():
 #	print("im ready tree")
 	if poi != null:
+		# print person of interest
+		# should be 0
+		var column = getFreePosition(0, 0, 0)
+		poi.rect_position = calcPosition(0, column)
 		add_child(poi)
-		level_counts['level0'] = 0
+
+		level_counts['level0'] = [0]
 
 		renderParents(poi.uid, -1)
 
 #		renderSiblings(poi.uid, 0)
-		renderPartners(poi.uid, 0)
+#		renderPartners(poi.uid, 0)
 
-		renderChildren(poi.uid, 1)
+#		renderChildren(poi.uid, 1)
 
 
 # funcs used for visualization
 
-func renderParents(id, level):
+func renderParents(id, level, column = 0):
 	var individuals = findParents(id)
 	if individuals:
+		# first parent will go to the left
+		var side = -1
 		for individual in individuals:
 			if individual:
-				individual.rect_position = getFreePosition(level)
+				# get depth of current individual to find position
+				var newcolumn = getFreePosition(level, column, getDepth(individual.uid), side)
+				individual.rect_position = calcPosition(level, newcolumn)
 				add_child(individual)
-				renderParents(individual.uid, level-1)
+				renderParents(individual.uid, level-1, newcolumn)
+				# second parent will go to the right
+				side *= -1
 
 func renderChildren(id, level):
 	var individuals = findChildren(id)
@@ -50,10 +61,13 @@ func renderChildren(id, level):
 func renderPartners(id, level):
 	var individuals = findPartners(id)
 	if individuals:
+
 		for individual in individuals:
 			if individual:
+
 				individual.rect_position = getFreePosition(level)
 				add_child(individual)
+
 	#			renderPartners(individual.uid, level+1)
 
 func renderSiblings(id, level):
@@ -65,19 +79,46 @@ func renderSiblings(id, level):
 				add_child(individual)
 	#			renderSiblings(individual.uid, level+1)
 
+# returns the next free position (to the right) on a certain level
+func getFreePosition(level, childpos = 0, parentdepth = 0, side = 1):
 
-func getFreePosition(level):
-	# level is y position of the node
-	var margin = 40
+	var column = 0
 	if ! level_counts.has('level'+str(level)):
-		level_counts['level'+str(level)] = 0
-	else:
-		level_counts['level'+str(level)] += 1
-	var container = poi.getRect()
+		level_counts['level'+str(level)] = []
 
+	# get max of childpos + rightest column of current level
+	var basepos = childpos
+	if side == 1:
+		basepos = max(childpos, get_max(level_counts['level'+str(level)]))
+
+
+	# if child is at position x, parent will be depth*side
+	column = basepos + parentdepth * side
+
+	level_counts['level'+str(level)].append(column)
+
+	return column
+
+func get_max(arr):
+	if arr:
+		arr.sort()
+		return arr[arr.size()-1]
+	else:
+		return 0
+
+func calcPosition(level, column):
+	# level is y position of the node
+	var margin = 0
+
+	var container = poi.getRect()
 	return Vector2(
-		(container.position.x + container.size.x + margin) * level_counts['level'+str(level)],
-		(container.position.y + container.size.y + margin) * level)
+		(container.size.x * 0.8 + margin) * column,
+		(container.size.y + margin) * level
+	)
+
+#	return Vector2(
+#		(container.position.x + container.size.x + margin) * level_counts['level'+str(level)],
+#		(container.position.y + container.size.y + margin) * level)
 
 func getBoundaries():
 	var boundaries = Rect2(0,0,0,0)
@@ -134,6 +175,17 @@ func addFamily(id, husband, wife, children, date, location):
 	node.node_init(id, husband, wife, children, date, location)
 	families.append(node)
 	return families.size()-1
+
+
+func getDepth(uid, level = 1):
+	var parents = findParents(uid)
+	if parents:
+		level = level + 1
+		for node in parents:
+			if node:
+				level = max(level, getDepth(node.uid, level))
+	return level
+
 
 func findIndividual(uid):
 	for node in individuals:

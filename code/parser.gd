@@ -82,7 +82,7 @@ func parse(tree, filename):
 	var current_family = null
 	var current_group = null
 
-#	while !_file.eof_reached() && _index < 30:
+#	while !_file.eof_reached() && _index < 1000:
 	while !_file.eof_reached():
 		var _line = _file.get_line()
 		var node_id
@@ -136,7 +136,8 @@ func parse(tree, filename):
 
 			if _line.find("2 FILE ") == 0 && current_group == "image":
 				tree.setIndividualField(current_individual, "image", lineval(_line))
-			# 3 _ALTPATH .\Stammbaum Media\
+			if _line.find("3 _ALTPATH ") == 0 && current_group == "image":
+				tree.setIndividualField(current_individual, "imagepath", lineval(_line))
 
 #			print(_line, " - ", current_individual, " | ",  tree.individuals[current_individual].to_string())
 
