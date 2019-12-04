@@ -17,7 +17,7 @@ var column = 0
 func _ready():
 #	print("im ready individual")
 	#get_node("container/vbox/text").push_align(RichTextLabel.ALIGN_CENTER)
-	get_node("container/vbox/text").bbcode_text = "[center]" + to_string() + "[/center]"
+	setTitle(to_string())
 	if image and imagepath:
 		get_node("container/vbox/hbox/image").texture = getTexture(imagepath, image)
 
@@ -36,6 +36,9 @@ func getTexture(path, image):
 	img.load("_familytree\\"+ path + "\\"+ image)
 	itex.create_from_image(img)
 	return itex
+	
+func setTitle(text):
+	get_node("container/vbox/text").bbcode_text = "[center]" + text + "[/center]"
 
 # funcs used for building upfamilytree data
 

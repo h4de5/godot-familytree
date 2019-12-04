@@ -45,11 +45,14 @@ func renderParents(id, level, column = 0):
 				var newcolumn = 0
 #				newcolumn = getFreePosition(level, column, getDepth(individual.uid), side)
 				var maximums = getMaxRightLeft(individual.uid)
+				
+				#individual.setTitle(str(maximums[0]) + '/'+ str(maximums[1]) + individual.to_string())
+				individual.personname = str(maximums[0]) + '/'+ str(maximums[1]) + individual.personname
 
-				if side == -1:
-					newcolumn = getFreePosition(level, column, maximums[0], side)
-				else:
-					newcolumn = getFreePosition(level, column, maximums[1], side)
+#				if side == -1:
+#					newcolumn = getFreePosition(level, column, maximums, side)
+#				else:
+				newcolumn = getFreePosition(level, column, maximums, side)
 
 				individual.rect_position = calcPosition(level, newcolumn)
 				add_child(individual)
@@ -85,22 +88,27 @@ func renderSiblings(id, level):
 				add_child(individual)
 	#			renderSiblings(individual.uid, level+1)
 
+	
 # returns the next free position (to the right) on a certain level
 # if current node is side -1 (husband) than it should be placed in that column, where the right-most parent element is above the childs column-1
 # if current node is side +1 (wife) than it should be placed in that column, where the left-most parent element is above the child element+1
-func getFreePosition(level, childpos = 0, parentdepth = 0, side = 1):
+func getFreePosition(level, childcolumn = 0, parentmax = [0,0], side = 0):
 	var column = 0
 	if ! level_counts.has('level'+str(level)):
 		level_counts['level'+str(level)] = []
-	# get max of childpos + rightest column of current level
-	var basepos = childpos
-	if side == 1:
-		basepos = max(childpos, arrmax(level_counts['level'+str(level)]))
-	# if child is at position x, parent will be depth*side
-	column = basepos + parentdepth * side
+		
+	# get the rightest column on the left side
+	if side == -1:
+		column = parentmax[1]*-1 - 1
+	# and the leftest column of the right side
+	elif side == 1:
+		column = parentmax[0]*-1 + 1
+	
+	# add childs position
+	column += childcolumn
+	# save it for later
 	level_counts['level'+str(level)].append(column)
 	return column
-
 
 
 func calcPosition(level, column):
@@ -187,37 +195,29 @@ func getDepth(uid, level = 1):
 
 # get rightest and leftest element up the tree
 # yes - rightest and leftest .. those are words now
-# side = 1.. right, -1 .. left
-func getMaxRightLeft(uid, currentcolumn = 0, side = 0):
+# side = 1..right, -1..left
+func getMaxRightLeft(uid):
 	var rightest = 0
 	var leftest = 0
 
 	var parents = findParents(uid)
 	if parents:
-		var parent_side = 0
+		var parent_side = -1
 		for node in parents:
 			if node:
 				var maxrightleft
 
-				maxrightleft = getMaxRightLeft(node.uid, currentcolumn - 1, -1)
+				maxrightleft = getMaxRightLeft(node.uid)
 
 				# husband - left .. == 0
 				# wife right .. == 1
-				if maxrightleft:
-					leftest = max(leftest, maxrightleft[0])
-					rightest = max(rightest, maxrightleft[1])
-#
-#				if parent_side == 0:
-#					leftest = maxrightleft[0] - 1
-#				else:
-#					leftest = maxrightleft[0] - 1
-#					rightest = getMaxRightLeft(node.uid, currentcolumn + 1, 1) + 1
-			parent_side += 1
-#	if side == -1:
-#		return leftest
-#	elif side == 1:
-#		return rightest
-#	else:
+				
+				# woop woop - thats it
+				leftest = min(leftest,maxrightleft[0] - maxrightleft[1] + parent_side)
+				rightest = max(rightest,maxrightleft[1] - maxrightleft[0] + parent_side)
+
+			parent_side *= -1
+			
 	return [leftest,rightest]
 
 func findIndividual(uid):
