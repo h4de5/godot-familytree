@@ -16,13 +16,13 @@ func _ready():
 
 # funcs used for building upfamilytree data
 
-func node_init(fid, husband, wife, children, date, location):
-	self.fid = fid
-	self.husband = husband
-	self.wife = wife
-	self.children = children
-	self.date = date
-	self.location = location
+func node_init(_fid, _husband, _wife, _children, _date, _location):
+	self.fid = _fid
+	self.husband = _husband
+	self.wife = _wife
+	self.children = _children
+	self.date = _date
+	self.location = _location
 
 
 func to_string():

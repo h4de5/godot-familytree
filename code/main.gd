@@ -23,10 +23,11 @@ func _ready():
 
 	tree = parser.parse(tree, "_familytree/Stammbaum.ged")
 	
-	if !tree.individuals.size():
+	if !tree._individuals.size():
 		tree = parser.generateExample(tree)
 		
 	print(tree.to_string(tree.findIndividual("I5")))
+#	tree.listIndividuals()
 	tree.poi = tree.findIndividual("I1")
 	add_child(tree)
 	print("ende ready main")

@@ -4,27 +4,19 @@
 [ext_resource path="res://assets/antler.jpg" type="Texture" id=2]
 
 [node name="Branch" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
 script = ExtResource( 1 )
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-margin_left = -99.0
-margin_top = -46.0
-margin_right = 201.0
-margin_bottom = -46.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer"]
-margin_left = 150.0
-margin_right = 150.0
-
 [node name="Line2D" type="Line2D" parent="."]
-position = Vector2( -255.75, -99.3073 )
-scale = Vector2( 0.773514, 1 )
-points = PoolVector2Array( -0.931, 69.9552, 0.137573, 101.949, 8.05341, 108.356, 26.6956, 106.727, 43.3447, 108.534, 64.3752, 106.953, 99.7181, 109.438, 238.734, 110.368, 250.752, 135.435, 268.663, 110.368, 450.953, 110.368, 452.313, 57.3134 )
+z_index = -1
+points = PoolVector2Array( -50, -10, -44.1667, -3.81437, -35.1922, -2.68076, -28.0621, -0.232655, -19.9627, -0.744202, -12.9715, 2.23981, -7.34454, 6.24692, -1.29124, 9.40145, 0, 10, 3.22741, 8.97517, 9.02493, 4.71229, 15.7603, 2.41033, 22.3251, 0.449406, 28.2079, 0.619923, 35.2843, -0.573685, 44.4921, -3.81347, 48.9255, -7.47955, 50, -10 )
+width = 60.0
 default_color = Color( 1, 1, 1, 1 )
 texture = ExtResource( 2 )
 texture_mode = 1
 joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Line2D"]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Line2D/CenterContainer"]

@@ -8,3 +8,4 @@ export_presets.cfg
 .mono/
 # put your own family tree .ged file and images in here
 _familytree/*
+dist/*

@@ -4,9 +4,10 @@ extends Control
 #const Family = preload("Family.gd")
 const Individual = preload("res://code/Individual.tscn")
 const Family = preload("res://code/Family.tscn")
+const Branch = preload("res://code/Branch.tscn")
 
-var individuals = []
-var families = []
+var _individuals = []
+var _families = []
 # person of interest
 var poi = null
 
@@ -19,12 +20,12 @@ func _ready():
 		# print person of interest
 		# should be 0
 		var column = getFreePosition(0, 0, 0)
-		poi.rect_position = calcPosition(0, column)
+		poi.setPosition(calcPosition(0, column))
 		add_child(poi)
 
 		level_counts['level0'] = [0]
 
-		renderParents(poi.uid, -1)
+		renderParents(poi, -1)
 
 #		renderSiblings(poi.uid, 0)
 #		renderPartners(poi.uid, 0)
@@ -34,8 +35,17 @@ func _ready():
 
 # funcs used for visualization
 
-func renderParents(id, level, column = 0):
-	var individuals = findParents(id)
+func renderBranch(child, parents):
+#	print("child: ", child.rect_position)
+#	print("father: ", parents[0].rect_position)
+#	print("mother: ", parents[1].rect_position)
+
+	var branch = Branch.instance();
+	branch.setIndividuals(child, parents)
+	add_child(branch)
+
+func renderParents(child, level, column = 0):
+	var individuals = findParents(child.uid)
 	if individuals:
 		# first parent will go to the left
 		var side = -1
@@ -47,25 +57,26 @@ func renderParents(id, level, column = 0):
 				var maximums = getMaxRightLeft(individual.uid)
 				
 				#individual.setTitle(str(maximums[0]) + '/'+ str(maximums[1]) + individual.to_string())
-				individual.personname = str(maximums[0]) + '/'+ str(maximums[1]) + individual.personname
+#				individual.personname = str(maximums[0]) + '/'+ str(maximums[1]) + individual.personname
 
 #				if side == -1:
 #					newcolumn = getFreePosition(level, column, maximums, side)
 #				else:
 				newcolumn = getFreePosition(level, column, maximums, side)
 
-				individual.rect_position = calcPosition(level, newcolumn)
+				individual.setPosition( calcPosition(level, newcolumn) )
 				add_child(individual)
-				renderParents(individual.uid, level-1, newcolumn)
+				renderParents(individual, level-1, newcolumn)
 				# second parent will go to the right
-				side *= -1
+			side *= -1
+		renderBranch(child, individuals)
 
 func renderChildren(id, level):
 	var individuals = findChildren(id)
 	if individuals:
 		for individual in individuals:
 			if individual:
-				individual.rect_position = getFreePosition(level)
+				individual.setPosition( getFreePosition(level) )
 				add_child(individual)
 				renderChildren(individual.uid, level+1)
 
@@ -74,7 +85,7 @@ func renderPartners(id, level):
 	if individuals:
 		for individual in individuals:
 			if individual:
-				individual.rect_position = getFreePosition(level)
+				individual.setPosition( getFreePosition(level))
 				add_child(individual)
 
 	#			renderPartners(individual.uid, level+1)
@@ -84,7 +95,7 @@ func renderSiblings(id, level):
 	if individuals:
 		for individual in individuals:
 			if individual:
-				individual.rect_position = getFreePosition(level)
+				individual.setPosition( getFreePosition(level))
 				add_child(individual)
 	#			renderSiblings(individual.uid, level+1)
 
@@ -117,8 +128,8 @@ func calcPosition(level, column):
 
 	var container = poi.getRect()
 	return Vector2(
-		(container.size.x * 0.8 + margin) * column,
-		(container.size.y + margin) * level
+		(container.size.x * 0.6 + margin) * column,
+		(container.size.y + margin) * level * 1.2
 	)
 
 #	return Vector2(
@@ -148,39 +159,39 @@ func arrmax(arr):
 func newIndividual(fid):
 	var node = Individual.instance();
 	node.uid = fid
-	individuals.append(node)
-	return individuals.size()-1
+	_individuals.append(node)
+	return _individuals.size()-1
 
 func newFamily(fid):
 	var node = Family.instance();
 	node.fid = fid
-	families.append(node)
-	return families.size()-1
+	_families.append(node)
+	return _families.size()-1
 
 func setIndividualField(index, field, value):
-	individuals[index][field] = value
+	_individuals[index][field] = value
 
 func setFamilyField(index, field, value):
 	if field == 'children':
-		if !families[index][field]:
-			families[index][field] = []
-		families[index][field].append(value)
+		if !_families[index][field]:
+			_families[index][field] = []
+		_families[index][field].append(value)
 	else:
-		families[index][field] = value
+		_families[index][field] = value
 
 func addIndividual(id, personname, birth, death, occupation, location, gender):
 #	var node = Individual.new();
 	var node = Individual.instance();
 	node.node_init(id, personname, birth, death, occupation, location, gender, '..\\icon.png', '..')
-	individuals.append(node)
-	return individuals.size()-1
+	_individuals.append(node)
+	return _individuals.size()-1
 
 func addFamily(id, husband, wife, children, date, location):
 #	var node = Family.new();
 	var node = Family.instance();
 	node.node_init(id, husband, wife, children, date, location)
-	families.append(node)
-	return families.size()-1
+	_families.append(node)
+	return _families.size()-1
 
 # iterates through a tree to get the deepest leaf
 func getDepth(uid, level = 1):
@@ -213,34 +224,38 @@ func getMaxRightLeft(uid):
 				# wife right .. == 1
 				
 				# woop woop - thats it
-				leftest = min(leftest,maxrightleft[0] - maxrightleft[1] + parent_side)
-				rightest = max(rightest,maxrightleft[1] - maxrightleft[0] + parent_side)
+				if parent_side == -1:
+					leftest = min(leftest,maxrightleft[0] - maxrightleft[1] + parent_side)
+#					rightest = max(rightest,maxrightleft[1] - maxrightleft[0] + parent_side)
+				else:
+#					leftest = min(leftest,maxrightleft[0] - maxrightleft[1] + parent_side)
+					rightest = max(rightest,maxrightleft[1] - maxrightleft[0] + parent_side)
 
 			parent_side *= -1
 			
 	return [leftest,rightest]
 
 func findIndividual(uid):
-	for node in individuals:
+	for node in _individuals:
 		if node.uid == uid:
 			return node
 	return null
 
 func findFamily(fid):
-	for node in families:
+	for node in _families:
 		if node.fid == fid:
 			return node
 	return null
 
 func findParents(id):
-	for node in families:
+	for node in _families:
 		if node.children.has(id):
 			return [findIndividual(node.husband), findIndividual(node.wife)]
 	return null
 
 func findChildren(id):
 	var children = []
-	for node in families:
+	for node in _families:
 		if node.husband == id or node.wife == id:
 			if node.children:
 				for child in node.children:
@@ -252,7 +267,7 @@ func findSiblings(id):
 	var parents = findParents(id)
 	if parents:
 		for parent in parents:
-			for node in families:
+			for node in _families:
 				if node.husband == parent.uid or node.wife == parent.uid:
 					for child in node.children:
 						if child != id and not siblings.has(findIndividual(child)):
@@ -261,7 +276,7 @@ func findSiblings(id):
 
 func findPartners(id):
 	var partners = []
-	for node in families:
+	for node in _families:
 		if node.husband == id and node.wife:
 			partners.append(findIndividual(node.wife))
 		if node.wife == id and node.husband:
@@ -269,11 +284,11 @@ func findPartners(id):
 	return partners
 
 func listIndividuals():
-	for node in individuals:
+	for node in _individuals:
 		print(node.to_string())
 
 func listFamilies():
-	for node in families:
+	for node in _families:
 		print(node.to_string())
 
 func to_string(node):
