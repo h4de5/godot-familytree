@@ -42,7 +42,15 @@ func renderParents(id, level, column = 0):
 		for individual in individuals:
 			if individual:
 				# get depth of current individual to find position
-				var newcolumn = getFreePosition(level, column, getDepth(individual.uid), side)
+				var newcolumn = 0
+#				newcolumn = getFreePosition(level, column, getDepth(individual.uid), side)
+				var maximums = getMaxRightLeft(individual.uid)
+
+				if side == -1:
+					newcolumn = getFreePosition(level, column, maximums[0], side)
+				else:
+					newcolumn = getFreePosition(level, column, maximums[1], side)
+
 				individual.rect_position = calcPosition(level, newcolumn)
 				add_child(individual)
 				renderParents(individual.uid, level-1, newcolumn)
@@ -61,10 +69,8 @@ func renderChildren(id, level):
 func renderPartners(id, level):
 	var individuals = findPartners(id)
 	if individuals:
-
 		for individual in individuals:
 			if individual:
-
 				individual.rect_position = getFreePosition(level)
 				add_child(individual)
 
@@ -80,31 +86,22 @@ func renderSiblings(id, level):
 	#			renderSiblings(individual.uid, level+1)
 
 # returns the next free position (to the right) on a certain level
+# if current node is side -1 (husband) than it should be placed in that column, where the right-most parent element is above the childs column-1
+# if current node is side +1 (wife) than it should be placed in that column, where the left-most parent element is above the child element+1
 func getFreePosition(level, childpos = 0, parentdepth = 0, side = 1):
-
 	var column = 0
 	if ! level_counts.has('level'+str(level)):
 		level_counts['level'+str(level)] = []
-
 	# get max of childpos + rightest column of current level
 	var basepos = childpos
 	if side == 1:
-		basepos = max(childpos, get_max(level_counts['level'+str(level)]))
-
-
+		basepos = max(childpos, arrmax(level_counts['level'+str(level)]))
 	# if child is at position x, parent will be depth*side
 	column = basepos + parentdepth * side
-
 	level_counts['level'+str(level)].append(column)
-
 	return column
 
-func get_max(arr):
-	if arr:
-		arr.sort()
-		return arr[arr.size()-1]
-	else:
-		return 0
+
 
 func calcPosition(level, column):
 	# level is y position of the node
@@ -130,13 +127,14 @@ func getBoundaries():
 				boundaries.position.y = min(boundaries.position.y, container.position.y)
 				boundaries.size.x = max(boundaries.size.x, container.position.x + container.size.x)
 				boundaries.size.y = max(boundaries.size.y, container.position.y + container.size.y)
-
-
 	return boundaries
 
-
-
-
+func arrmax(arr):
+	if arr:
+		arr.sort()
+		return arr[arr.size()-1]
+	else:
+		return 0
 
 # funcs used for building upfamilytree data
 func newIndividual(fid):
@@ -176,16 +174,51 @@ func addFamily(id, husband, wife, children, date, location):
 	families.append(node)
 	return families.size()-1
 
-
+# iterates through a tree to get the deepest leaf
 func getDepth(uid, level = 1):
 	var parents = findParents(uid)
 	if parents:
-		level = level + 1
+#		level = level + 1
 		for node in parents:
 			if node:
-				level = max(level, getDepth(node.uid, level))
+#				level = max(level, getDepth(node.uid, level))
+				level = max(level, getDepth(node.uid, level+1))
 	return level
 
+# get rightest and leftest element up the tree
+# yes - rightest and leftest .. those are words now
+# side = 1.. right, -1 .. left
+func getMaxRightLeft(uid, currentcolumn = 0, side = 0):
+	var rightest = 0
+	var leftest = 0
+
+	var parents = findParents(uid)
+	if parents:
+		var parent_side = 0
+		for node in parents:
+			if node:
+				var maxrightleft
+
+				maxrightleft = getMaxRightLeft(node.uid, currentcolumn - 1, -1)
+
+				# husband - left .. == 0
+				# wife right .. == 1
+				if maxrightleft:
+					leftest = max(leftest, maxrightleft[0])
+					rightest = max(rightest, maxrightleft[1])
+#
+#				if parent_side == 0:
+#					leftest = maxrightleft[0] - 1
+#				else:
+#					leftest = maxrightleft[0] - 1
+#					rightest = getMaxRightLeft(node.uid, currentcolumn + 1, 1) + 1
+			parent_side += 1
+#	if side == -1:
+#		return leftest
+#	elif side == 1:
+#		return rightest
+#	else:
+	return [leftest,rightest]
 
 func findIndividual(uid):
 	for node in individuals:

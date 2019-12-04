@@ -111,12 +111,10 @@ func parse(tree, filename):
 		elif _line.find("1 ") == 0 or _line.find("0 ") == 0:
 			current_group = null
 
-
-
 		if current_individual != null:
 
 			if _line.find("1 NAME ") == 0:
-				tree.setIndividualField(current_individual, "personname", lineval(_line))
+				tree.setIndividualField(current_individual, "personname", lineval(_line).replace("/","").replace("  ", " "))
 			if _line.find("2 SURN ") == 0:
 				pass
 			if _line.find("2 GIVN ") == 0:

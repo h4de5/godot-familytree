@@ -21,7 +21,6 @@ func _ready():
 	if image and imagepath:
 		get_node("container/vbox/hbox/image").texture = getTexture(imagepath, image)
 
-
 # funcs used for visualization
 
 func getRect():
@@ -52,7 +51,7 @@ func node_init(uid, personname, birth, death, occupation, location, gender, imag
 	self.imagepage = imagepage
 
 func to_string():
-	return  uid.to_upper() + " - " + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
+	return  uid.to_upper() + "\n" + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
 
 # example data from GEDCOM
 #	0 @I17@ INDI
