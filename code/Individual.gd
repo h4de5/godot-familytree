@@ -39,7 +39,7 @@ func getTexture(path, image):
 
 # funcs used for building upfamilytree data
 
-func node_init(uid, personname, birth, death, occupation, location, gender, image, imagepage):
+func node_init(uid, personname, birth, death, occupation, location, gender, image, imagepath):
 	self.uid = uid
 	self.personname = personname
 	self.birth = birth
@@ -48,7 +48,7 @@ func node_init(uid, personname, birth, death, occupation, location, gender, imag
 	self.location = location
 	self.gender = gender
 	self.image = image
-	self.imagepage = imagepage
+	self.imagepath = imagepath
 
 func to_string():
 	return  uid.to_upper() + "\n" + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();

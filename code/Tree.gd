@@ -163,7 +163,7 @@ func setFamilyField(index, field, value):
 func addIndividual(id, personname, birth, death, occupation, location, gender):
 #	var node = Individual.new();
 	var node = Individual.instance();
-	node.node_init(id, personname, birth, death, occupation, location, gender, "")
+	node.node_init(id, personname, birth, death, occupation, location, gender, '..\\icon.png', '..')
 	individuals.append(node)
 	return individuals.size()-1
 
