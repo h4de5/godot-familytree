@@ -24,12 +24,15 @@ margin_left = -200.0
 margin_top = -350.0
 margin_right = 200.0
 margin_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ColorRect" type="ColorRect" parent="container"]
 margin_top = 2.0
 margin_right = 400.0
 margin_bottom = 702.0
 rect_min_size = Vector2( 400, 700 )
+mouse_filter = 1
 color = Color( 0.392157, 0.588235, 0.862745, 1 )
 
 [node name="vbox" type="VBoxContainer" parent="container"]
@@ -57,6 +60,7 @@ margin_top = 454.0
 margin_right = 400.0
 margin_bottom = 704.0
 rect_min_size = Vector2( 400, 250 )
+mouse_filter = 1
 custom_fonts/normal_font = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
@@ -73,3 +77,5 @@ Beruf oder Tätigkeit
 Ort oder Stadt
 "
 scroll_active = false
+[connection signal="mouse_entered" from="container" to="." method="_on_container_mouse_entered"]
+[connection signal="mouse_exited" from="container" to="." method="_on_container_mouse_exited"]

@@ -10,6 +10,10 @@ var gender = ""
 var image = ""
 var imagepath = ""
 
+
+var level = 0
+var color = Color(0,0,0,0)
+
 # for visualization
 #var column = 0
 
@@ -18,15 +22,19 @@ func _ready():
 #	print("im ready individual")
 	#get_node("container/vbox/text").push_align(RichTextLabel.ALIGN_CENTER)
 	setTitle(to_string())
+
 	if image and imagepath:
 		get_node("container/vbox/hbox/image").texture = getTexture(imagepath, image)
 	else:
 		get_node("container/vbox/hbox").hide()
 #
 	if gender.to_upper() == "M":
-		get_node("container/ColorRect").color = Color(0.5, 0.6, 0.9, 1)
+		color = Color(0.5, 0.6, 0.9, 1)
+
 	elif gender.to_upper() == "W" or gender.to_upper() == "F":
-		get_node("container/ColorRect").color = Color(0.9, 0.6, 0.5, 1)
+		color = Color(0.9, 0.6, 0.5, 1)
+
+	get_node("container/ColorRect").color = color
 
 # funcs used for visualization
 
@@ -63,7 +71,6 @@ func getTexture(path, imagename):
 		var doFileExists = _file.file_exists(filename)
 		if doFileExists:
 			return load(filename)
-
 	return null
 
 
@@ -92,6 +99,16 @@ func to_string():
 		occupation.capitalize() + "\n" + \
 		location.capitalize();
 
+# highlihts on mouseover
+func _on_container_mouse_entered():
+	get_node("container/ColorRect").color = color * 1.3
+	get_node("/root/input").current_hover_node = self
+
+func _on_container_mouse_exited():
+	get_node("container/ColorRect").color = color
+	get_node("/root/input").current_hover_node = null
+
+
 # example data from GEDCOM
 #	0 @I17@ INDI
 #	1 _UID 5234A5234B3452E24256C34635E
@@ -111,3 +128,4 @@ func to_string():
 #	1 FAMS @F41@
 #	1 FAMS @F43@
 #	1 FAMS @F44@
+

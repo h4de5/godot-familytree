@@ -13,20 +13,31 @@ var poi = null
 
 var level_counts = {}
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-#	print("im ready tree")
+func _enter_tree():
 	if poi != null:
 		# print person of interest
 		# should be 0
 		var column = getFreePosition(0, 0, 0)
 		poi.setPosition(calcPosition(0, column))
+		poi.setScale( 1 )
 		add_child(poi)
 		renderSiblings(poi.uid, 0, 0, -1)
 
 		level_counts['level0'] = [0]
 
 		renderParents(poi, -1)
+
+func _exit_tree():
+	for i in range(get_child_count(), 0, -1):
+#		get_child(i).queue_free()
+		remove_child(get_child(i-1))
+	level_counts = {}
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	print("im ready tree")
+
+
 
 #		renderSiblings(poi.uid, 0)
 #		renderPartners(poi.uid, 0)
@@ -69,6 +80,7 @@ func renderParents(child, level, column = 0):
 
 				# render individual
 				individual.setPosition( calcPosition(level, newcolumn) )
+				individual.setScale( 1 )
 				add_child(individual)
 
 				renderParents(individual, level-1, newcolumn)
