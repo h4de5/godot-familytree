@@ -85,7 +85,12 @@ func node_init(_uid, _personname, _birth, _death, _occupation, _location, _gende
 
 func to_string():
 #	return  uid.to_upper() + "\n" + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
-	return  personname.capitalize() + "\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
+	var nameparts = personname.rsplit(" ", false, 1)
+	return  nameparts[1].capitalize() + "\n"+ \
+		nameparts[0] + "\n"+ \
+ 		birth +" - "+ death + "\n"+ \
+		occupation.capitalize() + "\n" + \
+		location.capitalize();
 
 # example data from GEDCOM
 #	0 @I17@ INDI

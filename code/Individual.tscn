@@ -7,7 +7,7 @@
 font_path = "res://assets/Roboto-Regular.ttf"
 
 [sub_resource type="DynamicFont" id=2]
-size = 42
+size = 40
 use_mipmaps = true
 use_filter = true
 font_data = SubResource( 1 )
@@ -39,29 +39,37 @@ margin_bottom = 704.0
 [node name="hbox" type="HBoxContainer" parent="container/vbox"]
 margin_left = 50.0
 margin_right = 350.0
-margin_bottom = 500.0
-rect_min_size = Vector2( 300, 500 )
+margin_bottom = 450.0
+rect_min_size = Vector2( 300, 450 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="image" type="TextureRect" parent="container/vbox/hbox"]
 margin_right = 300.0
-margin_bottom = 500.0
-rect_min_size = Vector2( 300, 500 )
+margin_bottom = 450.0
+rect_min_size = Vector2( 300, 450 )
 texture = ExtResource( 2 )
 expand = true
 stretch_mode = 6
 
 [node name="text" type="RichTextLabel" parent="container/vbox"]
-margin_top = 504.0
+margin_top = 454.0
 margin_right = 400.0
 margin_bottom = 704.0
-rect_min_size = Vector2( 400, 200 )
+rect_min_size = Vector2( 400, 250 )
 custom_fonts/normal_font = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
-bbcode_text = "[center]DEFAULT TEXT
-DEFAULT TEXT[/center]"
-text = "DEFAULT TEXT
-DEFAULT TEXT"
+bbcode_text = "[center]Langer Vorname 
+Nachname
+1950 - 2010
+Beruf oder Tätigkeit
+Ort oder Stadt
+[/center]"
+text = "Langer Vorname 
+Nachname
+1950 - 2010
+Beruf oder Tätigkeit
+Ort oder Stadt
+"
 scroll_active = false
