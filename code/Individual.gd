@@ -30,6 +30,9 @@ func _ready():
 
 # funcs used for visualization
 
+func setScale(factor = 1):
+	get_node("container").rect_scale = Vector2(factor, factor)
+	
 func setPosition(rect):
 	rect_position = rect
 

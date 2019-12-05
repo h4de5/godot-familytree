@@ -22,6 +22,7 @@ func _ready():
 		var column = getFreePosition(0, 0, 0)
 		poi.setPosition(calcPosition(0, column))
 		add_child(poi)
+		renderSiblings(poi.uid, 0, 0, -1)
 
 		level_counts['level0'] = [0]
 
@@ -53,19 +54,23 @@ func renderParents(child, level, column = 0):
 			if individual:
 				# get depth of current individual to find position
 				var newcolumn = 0
-#				newcolumn = getFreePosition(level, column, getDepth(individual.uid), side)
-				var maximums = getMaxRightLeft(individual.uid)
+				# DONE - siblings müssen schon vor freepositions abgeholt werden
+				# falls anzahl der geschwister > is maxdepth in die entsprechende richtung, muss leftest/rightest erhöht werden
+				var maximums = getMaxRightLeft(individual.uid, side)
 				
-				#individual.setTitle(str(maximums[0]) + '/'+ str(maximums[1]) + individual.to_string())
+#				individual.setTitle(str(maximums[0]) + '/'+ str(maximums[1]) + individual.to_string())
 #				individual.personname = str(maximums[0]) + '/'+ str(maximums[1]) + individual.personname
 
-#				if side == -1:
-#					newcolumn = getFreePosition(level, column, maximums, side)
-#				else:
+				
 				newcolumn = getFreePosition(level, column, maximums, side)
-
+				
+				# render siblings
+				renderSiblings(individual.uid, level, newcolumn, side)
+				
+				# render individual
 				individual.setPosition( calcPosition(level, newcolumn) )
 				add_child(individual)
+				
 				renderParents(individual, level-1, newcolumn)
 				# second parent will go to the right
 			side *= -1
@@ -90,13 +95,21 @@ func renderPartners(id, level):
 
 	#			renderPartners(individual.uid, level+1)
 
-func renderSiblings(id, level):
+func renderSiblings(id, level, column, side):
 	var individuals = findSiblings(id)
 	if individuals:
+		var i = 1
 		for individual in individuals:
 			if individual:
-				individual.setPosition( getFreePosition(level))
+				var newcolumn = getFreePosition(level, column+ i * side, [0,0], 0)
+				if side == 1:
+					newcolumn += 0.6
+				newcolumn += i * side * 0.1
+				individual.setPosition( calcPosition(level,  newcolumn) )
+				individual.setScale( 0.6 )
 				add_child(individual)
+				i += 1
+				
 	#			renderSiblings(individual.uid, level+1)
 
 	
@@ -110,10 +123,10 @@ func getFreePosition(level, childcolumn = 0, parentmax = [0,0], side = 0):
 		
 	# get the rightest column on the left side
 	if side == -1:
-		column = parentmax[1]*-1 - 1
+		column = parentmax[1]*-1 + side
 	# and the leftest column of the right side
 	elif side == 1:
-		column = parentmax[0]*-1 + 1
+		column = parentmax[0]*-1 + side
 	
 	# add childs position
 	column += childcolumn
@@ -207,7 +220,7 @@ func getDepth(uid, level = 1):
 # get rightest and leftest element up the tree
 # yes - rightest and leftest .. those are words now
 # side = 1..right, -1..left
-func getMaxRightLeft(uid):
+func getMaxRightLeft(uid, side = 0):
 	var rightest = 0
 	var leftest = 0
 
@@ -232,6 +245,12 @@ func getMaxRightLeft(uid):
 					rightest = max(rightest,maxrightleft[1] - maxrightleft[0] + parent_side)
 
 			parent_side *= -1
+
+	var siblings = findSiblings(uid)
+	if side == -1 and siblings.size() * -1 < leftest:
+		leftest = min(siblings.size() * -1, leftest)
+	if side == 1 and siblings.size() > rightest:
+		rightest = max(siblings.size(), rightest)
 			
 	return [leftest,rightest]
 
@@ -267,11 +286,12 @@ func findSiblings(id):
 	var parents = findParents(id)
 	if parents:
 		for parent in parents:
-			for node in _families:
-				if node.husband == parent.uid or node.wife == parent.uid:
-					for child in node.children:
-						if child != id and not siblings.has(findIndividual(child)):
-							siblings.append(findIndividual(child))
+			if parent:
+				for node in _families:
+					if node.husband == parent.uid or node.wife == parent.uid:
+						for child in node.children:
+							if child != id and not siblings.has(findIndividual(child)):
+								siblings.append(findIndividual(child))
 	return siblings
 
 func findPartners(id):
