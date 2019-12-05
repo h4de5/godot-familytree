@@ -32,7 +32,7 @@ func _ready():
 
 func setScale(factor = 1):
 	get_node("container").rect_scale = Vector2(factor, factor)
-	
+
 func setPosition(rect):
 	rect_position = rect
 
@@ -46,9 +46,9 @@ func getTexture(path, imagename):
 	imagename = imagename.replace("\\", "/");
 	var parts = imagename.rsplit("/",false, 1)
 	image = parts[1]
-	
+
 	var filename = "_familytree/"+ path + "/"+ image
-	
+
 #	if ResourceLoader.exists("res://_familytree/"+ path + "/"+ image):
 #		var img = Image.new()
 #		var itex = ImageTexture.new()
@@ -63,10 +63,10 @@ func getTexture(path, imagename):
 		var doFileExists = _file.file_exists(filename)
 		if doFileExists:
 			return load(filename)
-	
-	return null	
-	
-	
+
+	return null
+
+
 func setTitle(text):
 	get_node("container/vbox/text").bbcode_text = "[center]" + text + "[/center]"
 

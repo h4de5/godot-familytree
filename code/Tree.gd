@@ -57,20 +57,20 @@ func renderParents(child, level, column = 0):
 				# DONE - siblings müssen schon vor freepositions abgeholt werden
 				# falls anzahl der geschwister > is maxdepth in die entsprechende richtung, muss leftest/rightest erhöht werden
 				var maximums = getMaxRightLeft(individual.uid, side)
-				
+
 #				individual.setTitle(str(maximums[0]) + '/'+ str(maximums[1]) + individual.to_string())
 #				individual.personname = str(maximums[0]) + '/'+ str(maximums[1]) + individual.personname
 
-				
+
 				newcolumn = getFreePosition(level, column, maximums, side)
-				
+
 				# render siblings
 				renderSiblings(individual.uid, level, newcolumn, side)
-				
+
 				# render individual
 				individual.setPosition( calcPosition(level, newcolumn) )
 				add_child(individual)
-				
+
 				renderParents(individual, level-1, newcolumn)
 				# second parent will go to the right
 			side *= -1
@@ -109,10 +109,10 @@ func renderSiblings(id, level, column, side):
 				individual.setScale( 0.6 )
 				add_child(individual)
 				i += 1
-				
+
 	#			renderSiblings(individual.uid, level+1)
 
-	
+
 # returns the next free position (to the right) on a certain level
 # if current node is side -1 (husband) than it should be placed in that column, where the right-most parent element is above the childs column-1
 # if current node is side +1 (wife) than it should be placed in that column, where the left-most parent element is above the child element+1
@@ -120,14 +120,14 @@ func getFreePosition(level, childcolumn = 0, parentmax = [0,0], side = 0):
 	var column = 0
 	if ! level_counts.has('level'+str(level)):
 		level_counts['level'+str(level)] = []
-		
+
 	# get the rightest column on the left side
 	if side == -1:
 		column = parentmax[1]*-1 + side
 	# and the leftest column of the right side
 	elif side == 1:
 		column = parentmax[0]*-1 + side
-	
+
 	# add childs position
 	column += childcolumn
 	# save it for later
@@ -235,7 +235,7 @@ func getMaxRightLeft(uid, side = 0):
 
 				# husband - left .. == 0
 				# wife right .. == 1
-				
+
 				# woop woop - thats it
 				if parent_side == -1:
 					leftest = min(leftest,maxrightleft[0] - maxrightleft[1] + parent_side)
@@ -251,7 +251,7 @@ func getMaxRightLeft(uid, side = 0):
 		leftest = min(siblings.size() * -1, leftest)
 	if side == 1 and siblings.size() > rightest:
 		rightest = max(siblings.size(), rightest)
-			
+
 	return [leftest,rightest]
 
 func findIndividual(uid):

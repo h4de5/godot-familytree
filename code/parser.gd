@@ -78,31 +78,31 @@ func parse(tree, filename):
 
 	if doFileExists:
 		_file.open(filename,1)
-	
+
 		var _index = 0
 		var _cursorPos
 		var current_individual = null
 		var current_family = null
 		var current_group = null
-	
+
 	#	while !_file.eof_reached() && _index < 1000:
 		while !_file.eof_reached():
 			var _line = _file.get_line()
 			var node_id
-	
-	
+
+
 			if _line.substr(0,4) == "0 @I":
-	
+
 				node_id = lineval(_line, 1)
 				current_individual = tree.newIndividual(node_id)
 				current_family = null
-	
+
 			if _line.substr(0,4) == "0 @F":
 				node_id = lineval(_line, 1)
-	
+
 				current_family = tree.newFamily(node_id)
 				current_individual = null
-	
+
 			if _line.find("1 BIRT") == 0:
 				current_group = "birth"
 			elif _line.find("1 DEAT") == 0:
@@ -113,9 +113,9 @@ func parse(tree, filename):
 				current_group = "marrige"
 			elif _line.find("1 ") == 0 or _line.find("0 ") == 0:
 				current_group = null
-	
+
 			if current_individual != null:
-	
+
 				if _line.find("1 NAME ") == 0:
 					tree.setIndividualField(current_individual, "personname", lineval(_line).replace("/","").replace("  ", " "))
 				if _line.find("2 SURN ") == 0:
@@ -126,22 +126,22 @@ func parse(tree, filename):
 					tree.setIndividualField(current_individual, "occupation", lineval(_line))
 				if _line.find("1 SEX ") == 0:
 					tree.setIndividualField(current_individual, "gender", lineval(_line))
-	
+
 				if _line.find("2 DATE ") == 0 && current_group == "birth":
 					tree.setIndividualField(current_individual, "birth", lineval(_line))
 				if _line.find("2 PLAC ") == 0 && current_group == "birth":
 					tree.setIndividualField(current_individual, "location", lineval(_line))
-	
+
 				if _line.find("2 DATE ") == 0 && current_group == "death":
 					tree.setIndividualField(current_individual, "death", lineval(_line))
-	
+
 				if _line.find("2 FILE ") == 0 && current_group == "image":
 					tree.setIndividualField(current_individual, "image", lineval(_line))
 				if _line.find("3 _ALTPATH ") == 0 && current_group == "image":
 					tree.setIndividualField(current_individual, "imagepath", lineval(_line))
-	
+
 	#			print(_line, " - ", current_individual, " | ",  tree.individuals[current_individual].to_string())
-	
+
 			if current_family != null:
 				if _line.find("1 HUSB ") == 0:
 					tree.setFamilyField(current_family, "husband", lineval(_line))
@@ -153,15 +153,15 @@ func parse(tree, filename):
 					tree.setFamilyField(current_family, "date", lineval(_line))
 				if _line.find("2 PLAC ") == 0 && current_group == "marrige":
 					tree.setFamilyField(current_family, "location", lineval(_line))
-	
+
 			_index += 1
 			_cursorPos = _file.get_position()
 		_file.close()
 	else:
 		print("cannot find file name: "+ filename)
-		
+
 	return tree
-	
+
 
 func lineval(line, part = 2, max_parts = 2):
 	return line.split(" ", false, max_parts)[part].trim_prefix('@').trim_suffix('@')
