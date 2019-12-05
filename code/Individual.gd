@@ -46,7 +46,7 @@ func getTexture(path, imagename):
 	var itex = ImageTexture.new()
 	var parts = imagename.rsplit("\\",false, 1)
 	image = parts[1]
-	img.load("_familytree\\"+ path + "\\"+ image)
+	img.load("res://_familytree/"+ path + "/"+ image)
 	itex.create_from_image(img)
 	return itex
 	

@@ -21,12 +21,12 @@ func _ready():
 	var parser = Parser.new();
 #	tree = parser.generateExample(tree)
 
-	tree = parser.parse(tree, "_familytree/Stammbaum.ged")
+	tree = parser.parse(tree, "res://_familytree/Stammbaum.ged")
 	
 	if !tree._individuals.size():
 		tree = parser.generateExample(tree)
 		
-	print(tree.to_string(tree.findIndividual("I5")))
+#	print(tree.to_string(tree.findIndividual("I5")))
 #	tree.listIndividuals()
 	tree.poi = tree.findIndividual("I1")
 	add_child(tree)
