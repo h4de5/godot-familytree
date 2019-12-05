@@ -42,13 +42,30 @@ func getRectAbsolute():
 	return Rect2(rect_position + get_node("container").rect_position, get_node("container").rect_size)
 
 func getTexture(path, imagename):
-	var img = Image.new()
-	var itex = ImageTexture.new()
-	var parts = imagename.rsplit("\\",false, 1)
+	path = path.replace("\\", "/");
+	imagename = imagename.replace("\\", "/");
+	var parts = imagename.rsplit("/",false, 1)
 	image = parts[1]
-	img.load("res://_familytree/"+ path + "/"+ image)
-	itex.create_from_image(img)
-	return itex
+	
+	var filename = "_familytree/"+ path + "/"+ image
+	
+#	if ResourceLoader.exists("res://_familytree/"+ path + "/"+ image):
+#		var img = Image.new()
+#		var itex = ImageTexture.new()
+#		img.load("res://_familytree/"+ path + "/"+ image)
+#		itex.create_from_image(img)
+#		return itex
+#	else:
+	if ResourceLoader.exists("res://_familytree/"+ path + "/"+ image):
+		return load("res://_familytree/"+ path + "/"+ image)
+	else:
+		var _file = File.new()
+		var doFileExists = _file.file_exists(filename)
+		if doFileExists:
+			return load(filename)
+	
+	return null	
+	
 	
 func setTitle(text):
 	get_node("container/vbox/text").bbcode_text = "[center]" + text + "[/center]"
