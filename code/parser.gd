@@ -70,7 +70,7 @@ func file_ready(tree, filebody: String):
 		tree = generateExample(tree)
 		get_node("/root/main").setPersonOfInterest("I1")
 
-	
+
 
 
 

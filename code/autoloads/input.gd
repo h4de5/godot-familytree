@@ -109,6 +109,22 @@ func _input(event):
 		if event.button_index == BUTTON_MIDDLE and current_hover_node != null:
 			get_node("/root/main").setPersonOfInterest(current_hover_node.uid)
 			current_hover_node = null
+	elif event is InputEventKey and event.is_pressed():
+		if event.scancode == KEY_1:
+
+#			var image = get_viewport().get_texture().get_data()
+			var viewport = get_node("/root/main/Viewport")
+
+			var tree = get_node("/root/main/Tree")
+			get_node("/root/main").remove_child(tree)
+
+
+#			viewport.add_child(tree.duplicate())
+			viewport.add_child(tree)
+#			viewport.get_node("Camera2D").zoom = Vector2(0.1,0.1)
+			var image = viewport.get_texture().get_data()
+			image.flip_y()
+			image.save_png("screenshot.png")
 
 #	if event is InputEventMouseMotion and mousedown:
 #		mousepos = get_global_mouse_position()

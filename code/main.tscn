@@ -13,3 +13,11 @@ drag_margin_left = 0.1
 drag_margin_top = 0.1
 drag_margin_right = 0.1
 drag_margin_bottom = 0.1
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 5000, 3000 )
+disable_3d = true
+usage = 0
+gui_disable_input = true
+
+[node name="Camera2D" type="Camera2D" parent="Viewport"]

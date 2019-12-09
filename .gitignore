@@ -9,3 +9,4 @@ export.cfg
 # put your own family tree .ged file and images in here
 _familytree/*
 dist/*
+settings.cfg

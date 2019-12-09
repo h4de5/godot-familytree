@@ -1,0 +1,4 @@
+[familytree]
+filename="Stammbaum.ged"
+directory="_familytree/"
+server="https://www.example.com/path/"

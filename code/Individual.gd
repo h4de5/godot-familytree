@@ -144,7 +144,7 @@ func to_string():
  		birth +" - "+ death + "\n"+ \
 		location.capitalize()
 #		occupation.capitalize() + "\n" + \
-		
+
 
 # highlihts on mouseover
 func _on_container_mouse_entered():
