@@ -142,8 +142,9 @@ func to_string():
 	return  nameparts[1].capitalize() + "\n"+ \
 		nameparts[0] + "\n"+ \
  		birth +" - "+ death + "\n"+ \
-		occupation.capitalize() + "\n" + \
-		location.capitalize();
+		location.capitalize()
+#		occupation.capitalize() + "\n" + \
+		
 
 # highlihts on mouseover
 func _on_container_mouse_entered():

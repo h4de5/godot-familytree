@@ -63,12 +63,14 @@ func loadfile_return(result, response_code, headers, body, params = []):
 func file_ready(tree, filebody: String):
 	if filebody and filebody.length():
 		tree = parse(tree, filebody)
+		get_node("/root/main").setPersonOfInterest("I3")
 	else:
 		printerr("please provide .ged file")
 		print("generating example tree..")
 		tree = generateExample(tree)
+		get_node("/root/main").setPersonOfInterest("I1")
 
-	get_node("/root/main").setPersonOfInterest("I1")
+	
 
 
 
