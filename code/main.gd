@@ -4,25 +4,36 @@ extends Node2D
 # each family has husband, wife and children
 # each of those are individuals
 
+
+
 # const Tree = preload("Tree.gd")
 const Tree = preload("res://code/Tree.tscn")
-const Parser = preload("parser.gd")
+#const Parser = preload("parser.gd")
 var tree
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 
-	var parser = Parser.new();
-
+#	parser = Parser.new()
 	tree = Tree.instance()
-	tree = parser.parse(tree, "res://_familytree/Stammbaum.ged")
+	# should not be part of export - use normal path
+	# tree = parser.parse(tree, "res://_familytree/Stammbaum.ged")
+	#tree = parser.parse(tree, "_familytree/Stammbaum.ged")
+#	var stammbaum_filename = "user://_familytree/Stammbaum.ged"
 
-	if !tree._individuals.size():
-		tree = parser.generateExample(tree)
+	#var basepath = ProjectSettings.globalize_path("res://")
+	#print ('basepath: '+ basepath)
+	#if basepath == '':
+	#	basepath = '/volume1/web/dev/familytree/'
+
+	call_deferred("start_parser")
+	print("Main ready ready")
 
 #	print(tree.to_string(tree.findIndividual("I5")))
 #	tree.listIndividuals()
-	setPersonOfInterest("I1")
+
+func start_parser():
+	parser.file_prepare(tree)
 
 
 func setPersonOfInterest(uid):

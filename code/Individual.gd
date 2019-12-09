@@ -11,7 +11,7 @@ var image = ""
 var imagepath = ""
 
 
-var level = 0
+#var level = 0
 var color = Color(0,0,0,0)
 
 # for visualization
@@ -24,7 +24,7 @@ func _ready():
 	setTitle(to_string())
 
 	if image and imagepath:
-		get_node("container/vbox/hbox/image").texture = getTexture(imagepath, image)
+		setImage(getTexture(imagepath, image))
 	else:
 		get_node("container/vbox/hbox").hide()
 #
@@ -49,13 +49,24 @@ func getRect():
 func getRectAbsolute():
 	return Rect2(rect_position + get_node("container").rect_position, get_node("container").rect_size)
 
+
+func setImage(texture):
+
+	if texture:
+		get_node("container/vbox/hbox").show()
+		get_node("container/vbox/hbox/image").texture = texture
+	else:
+		get_node("container/vbox/hbox").hide()
+
 func getTexture(path, imagename):
-	path = path.replace("\\", "/");
+	path = path.replace("\\", "/").lstrip("./");
 	imagename = imagename.replace("\\", "/");
 	var parts = imagename.rsplit("/",false, 1)
 	image = parts[1]
 
-	var filename = "_familytree/"+ path + "/"+ image
+#	var basepath = ProjectSettings.globalize_path("res://")
+
+	var filename = "_familytree/"+ path +  image
 
 #	if ResourceLoader.exists("res://_familytree/"+ path + "/"+ image):
 #		var img = Image.new()
@@ -64,14 +75,49 @@ func getTexture(path, imagename):
 #		itex.create_from_image(img)
 #		return itex
 #	else:
-	if ResourceLoader.exists("res://_familytree/"+ path + "/"+ image):
-		return load("res://_familytree/"+ path + "/"+ image)
+	# while running from editor - load it as resource
+	if ResourceLoader.exists("res://"+ filename):
+#		print("loading resource: "+ filename)
+		return load("res://" + filename)
 	else:
-		var _file = File.new()
-		var doFileExists = _file.file_exists(filename)
-		if doFileExists:
-			return load(filename)
+		# on web export - load it via http request
+		if OS.get_name() == 'HTML5':
+#			print("loading http image: "+ filename)
+
+			var fullurl = config.familytreeServer + filename
+			request.send(fullurl, '', '', "on_request_completed", self)
+
+		else:
+			# all other exports - load it as file from the same directory
+			var _file = File.new()
+			var doFileExists = _file.file_exists(filename)
+			if doFileExists:
+#				print("loading file: "+ filename)
+				return load(filename)
+			else:
+				print("file not found: "+ filename)
 	return null
+
+
+# general request completion information
+# use this func signature for callback methods
+# call this func to get response
+func on_request_completed(result, response_code, headers, body, params = []):
+	#disconnect("request_completed", self, "_on_request_completed")
+	if result == HTTPRequest.RESULT_SUCCESS and response_code == HTTPClient.RESPONSE_OK:
+
+		var image = Image.new()
+		var image_error = image.load_jpg_from_buffer(body)
+		if image_error != OK:
+			printerr("An error occurred while trying to display the image.")
+
+		var texture = ImageTexture.new()
+		texture.create_from_image(image)
+
+		setImage(texture)
+
+	else:
+		printerr("Request failed - Code: ", result, " HTTP Status: ", response_code)
 
 
 func setTitle(text):

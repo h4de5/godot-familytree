@@ -21,7 +21,10 @@ config/icon="res://icon.png"
 
 [autoload]
 
-input="*res://code/input.gd"
+config="*res://code/autoloads/config.gd"
+input="*res://code/autoloads/input.gd"
+request="*res://code/autoloads/request.gd"
+parser="*res://code/parser.gd"
 
 [display]
 
