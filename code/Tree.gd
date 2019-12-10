@@ -21,6 +21,7 @@ func _enter_tree():
 		poi.setPosition(calcPosition(0, column))
 		poi.setScale( 1 )
 		add_child(poi)
+		renderPartners(poi.uid, 0, 0, 1, 1)
 		renderSiblings(poi.uid, 0, 0, -1)
 
 		level_counts['level0'] = [0]
@@ -39,12 +40,6 @@ func _ready():
 
 
 
-#		renderSiblings(poi.uid, 0)
-#		renderPartners(poi.uid, 0)
-
-#		renderChildren(poi.uid, 1)
-
-
 # funcs used for visualization
 
 func renderBranch(child, parents):
@@ -52,7 +47,7 @@ func renderBranch(child, parents):
 #	print("father: ", parents[0].rect_position)
 #	print("mother: ", parents[1].rect_position)
 
-	var branch = Branch.instance();
+	var branch = Branch.instance()
 	branch.setIndividuals(child, parents)
 	add_child(branch)
 
@@ -97,15 +92,27 @@ func renderChildren(id, level):
 				add_child(individual)
 				renderChildren(individual.uid, level+1)
 
-func renderPartners(id, level):
+func renderPartners(id, level, column, side, scale):
 	var individuals = findPartners(id)
+	var i = 1
 	if individuals:
 		for individual in individuals:
 			if individual:
-				individual.setPosition( getFreePosition(level))
+				var newcolumn = getFreePosition(level, column+ i * side, [0,0], 0)
+				if side == 1 and level == 0:
+					newcolumn += scale
+				newcolumn += i * side * 0.1
+				individual.setPosition( calcPosition(level,  newcolumn) )
+				individual.setScale( scale )
 				add_child(individual)
+				i += 1
 
-	#			renderPartners(individual.uid, level+1)
+# TODO - branches between partner of siblings
+#		var family = individuals.duplicate()
+#		family.append(findIndividual(id))
+#		renderBranch(null, family)
+
+	return i-1
 
 func renderSiblings(id, level, column, side):
 	var individuals = findSiblings(id)
@@ -118,11 +125,14 @@ func renderSiblings(id, level, column, side):
 					newcolumn += 0.6
 				newcolumn += i * side * 0.1
 				individual.setPosition( calcPosition(level,  newcolumn) )
-				individual.setScale( 0.6 )
+				individual.setScale( 0.65 )
 				add_child(individual)
-				i += 1
+				var partners = renderPartners(individual.uid, level, newcolumn, side, 0.65)
+				# add spaces between partners and next sibling
+				if partners > 0:
+					partners += 0.3
+				i += 1 + partners
 
-	#			renderSiblings(individual.uid, level+1)
 
 
 # returns the next free position (to the right) on a certain level
@@ -163,14 +173,20 @@ func calcPosition(level, column):
 
 func getBoundaries():
 	var boundaries = Rect2(0,0,0,0)
+	var bound_lower = Vector2(0,0)
+	var bound_upper = Vector2(0,0)
 	if get_children():
 		for node in get_children():
 			if node is preload("Individual.gd"):
 				var container = node.getRectAbsolute()
-				boundaries.position.x = min(boundaries.position.x, container.position.x)
-				boundaries.position.y = min(boundaries.position.y, container.position.y)
-				boundaries.size.x = max(boundaries.size.x, container.position.x + container.size.x)
-				boundaries.size.y = max(boundaries.size.y, container.position.y + container.size.y)
+				boundaries = boundaries.merge(container)
+#				bound_lower.x = min(bound_lower.position.x, container.position.x)
+#				bound_lower.y = min(bound_lower.position.y, container.position.y)
+#				bound_upper.x = max(bound_upper.position.x, container.position.x)
+#				bound_upper.y = max(bound_upper.position.y, container.position.y)
+#
+#				boundaries.size.x = max(boundaries.size.x, abs(bound_lower.position.x) + bound_upper.posi + container.size.x))
+#				boundaries.size.y = max(boundaries.size.y, abs(container.position.y + container.size.y))
 	return boundaries
 
 func arrmax(arr):
@@ -194,7 +210,8 @@ func newFamily(fid):
 	return _families.size()-1
 
 func setIndividualField(index, field, value):
-	_individuals[index][field] = value
+	if _individuals[index][field] == '':
+		_individuals[index][field] = value
 
 func setFamilyField(index, field, value):
 	if field == 'children':

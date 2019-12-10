@@ -45,9 +45,11 @@ func setPosition(rect):
 	rect_position = rect
 
 func getRect():
-	return Rect2(get_node("container").rect_position, get_node("container").rect_size)
+	return Rect2(get_node("container").rect_position, get_node("container").rect_size * get_node("container").rect_scale )
 func getRectAbsolute():
-	return Rect2(rect_position + get_node("container").rect_position, get_node("container").rect_size)
+	# main container does not have a size
+	return Rect2(rect_position + get_node("container").rect_position, get_node("container").rect_size * get_node("container").rect_scale )
+	#return Rect2(rect_position, rect_size)
 
 
 func setImage(texture):

@@ -13,7 +13,8 @@ var tree
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-
+	# ProjectSettings.set("rendering/environment/default_clear_color", "#ffffff")
+	VisualServer.set_default_clear_color(Color("ffffff"))
 #	parser = Parser.new()
 	tree = Tree.instance()
 	# should not be part of export - use normal path

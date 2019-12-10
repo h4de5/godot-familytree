@@ -111,20 +111,46 @@ func _input(event):
 			current_hover_node = null
 	elif event is InputEventKey and event.is_pressed():
 		if event.scancode == KEY_1:
+			var Screenshot = load("res://code/Screenshot.tscn")
+			var screenshot = Screenshot.instance()
+			add_child(screenshot)
 
-#			var image = get_viewport().get_texture().get_data()
-			var viewport = get_node("/root/main/Viewport")
+			var tree_scene = get_node("/root/main/Tree")
+			screenshot.prepare(tree_scene, tree_scene.getBoundaries(), get_viewport())
+			yield(get_tree(),"idle_frame")
+			yield(get_tree(),"idle_frame")
+#			get_tree().change_scene_to(Screenshot)
 
-			var tree = get_node("/root/main/Tree")
-			get_node("/root/main").remove_child(tree)
+			screenshot.capture("screenshot.png")
+			get_parent().remove_child(screenshot)
 
+#			get_tree().change_scene("/root/main")
 
-#			viewport.add_child(tree.duplicate())
-			viewport.add_child(tree)
-#			viewport.get_node("Camera2D").zoom = Vector2(0.1,0.1)
-			var image = viewport.get_texture().get_data()
-			image.flip_y()
-			image.save_png("screenshot.png")
+#
+#	#			var image = get_viewport().get_texture().get_data()
+#				var viewport = get_node("/root/main/ViewportContainer/Viewport")
+#
+#				viewport.own_world = true
+#				viewport.set_world( get_viewport().get_world() )
+#				viewport.set_world_2d( get_viewport().get_world_2d() )
+#
+#				var tree = get_node("/root/main/Tree")
+#				tree.get_parent().remove_child(tree)
+#
+#	#			viewport.add_child(tree.duplicate(DUPLICATE_USE_INSTANCING | DUPLICATE_SCRIPTS))
+#				viewport.add_child(tree)
+#				viewport.get_node("Camera2D").current = true
+#
+#	#			viewport.get_node("Camera2D").position = tree.rect_position
+#				viewport.get_node("Camera2D").position = get_node("/root/main/Camera2D").position
+#
+#				yield(get_tree(),"idle_frame")
+#				yield(get_tree(),"idle_frame")
+#
+#	#			viewport.get_node("Camera2D").zoom = Vector2(0.1,0.1)
+#				var image = viewport.get_texture().get_data()
+#				image.flip_y()
+#				image.save_png("screenshot.png")
 
 #	if event is InputEventMouseMotion and mousedown:
 #		mousepos = get_global_mouse_position()

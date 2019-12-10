@@ -38,4 +38,5 @@ common/physics_fps=30
 
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
+environment/default_clear_color=Color( 0.301961, 0.301961, 0.301961, 1 )
 environment/default_environment="res://default_env.tres"
