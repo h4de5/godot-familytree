@@ -11,30 +11,39 @@ var image = ""
 var imagepath = ""
 
 
-#var level = 0
+var level = 0
 var color = Color(0,0,0,0)
+var silhouette = ''
+
 
 # for visualization
 #var column = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-#	print("im ready individual")
+	#print("im ready individual: " + uid)
 	#get_node("container/vbox/text").push_align(RichTextLabel.ALIGN_CENTER)
 	setTitle(to_string())
+
+	if gender.to_upper() == "M":
+#		color = Color(0.5, 0.6, 0.9, 1)
+		color = Color('#DBD9FF')
+		get_node("container/vbox/hbox/image").material.set_shader_param("colour_modulate", Color(0.9, 0.9, 1, 1))
+		silhouette = 'silhouette-man.jpg'
+
+	elif gender.to_upper() == "W" or gender.to_upper() == "F":
+#		color = Color(0.9, 0.6, 0.5, 1)
+		color = Color('#FFD9D9')
+		get_node("container/vbox/hbox/image").material.set_shader_param("colour_modulate", Color(1, 0.9, 0.9, 1))
+		silhouette = 'silhouette-woman.jpg'
+
+	get_node("container/ColorRect").color = color
 
 	if image and imagepath:
 		setImage(getTexture(imagepath, image))
 	else:
-		get_node("container/vbox/hbox").hide()
-#
-	if gender.to_upper() == "M":
-		color = Color(0.5, 0.6, 0.9, 1)
-
-	elif gender.to_upper() == "W" or gender.to_upper() == "F":
-		color = Color(0.9, 0.6, 0.5, 1)
-
-	get_node("container/ColorRect").color = color
+		setImage(load("res://assets/"+silhouette))
+		#get_node("container/vbox/hbox").hide()
 
 # funcs used for visualization
 
@@ -53,12 +62,15 @@ func getRectAbsolute():
 
 
 func setImage(texture):
-
 	if texture:
 		get_node("container/vbox/hbox").show()
 		get_node("container/vbox/hbox/image").texture = texture
 	else:
 		get_node("container/vbox/hbox").hide()
+
+func setLevel(_level):
+	self.level = _level
+
 
 func getTexture(path, imagename):
 	path = path.replace("\\", "/").lstrip("./");
@@ -140,9 +152,23 @@ func node_init(_uid, _personname, _birth, _death, _occupation, _location, _gende
 
 func to_string():
 #	return  uid.to_upper() + "\n" + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
+
+	# lastname first
 	var nameparts = personname.rsplit(" ", false, 1)
-	return  nameparts[1].capitalize() + "\n"+ \
-		nameparts[0] + "\n"+ \
+	var lastname
+	var firstname
+	if nameparts[1] != '...':
+		lastname = nameparts[1].strip_edges().capitalize() + "\n"
+	else:
+		lastname = ''
+	if nameparts[0] != '...':
+		firstname = nameparts[0].strip_edges().capitalize() + "\n"
+	else:
+		firstname = ''
+
+	# reformat date to year only
+
+	return  str(level) + " " + lastname + firstname + \
  		birth +" - "+ death + "\n"+ \
 		location.capitalize()
 #		occupation.capitalize() + "\n" + \

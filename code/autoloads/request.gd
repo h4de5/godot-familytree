@@ -91,7 +91,7 @@ func _send(request, url, query = '', data = '', callback = null, parent = null, 
 		check_certificate = true
 
 	# START HTTP REQUEST
-	var code = request.request(url + query, _header(data), check_certificate, method, data )
+	request.request(url + query, _header(data), check_certificate, method, data )
 
 #	print("starting ", method, " Request to url: ", url+query, " data ", data, " returns: ", code)
 

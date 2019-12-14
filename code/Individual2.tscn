@@ -1,0 +1,155 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://code/Individual.gd" type="Script" id=1]
+[ext_resource path="res://assets/pear_mask.png" type="Texture" id=2]
+[ext_resource path="res://assets/arch-with-green-leaves-and-tree-branches-png-image-1114.png" type="Texture" id=3]
+[ext_resource path="res://assets/banner-scroll-upsidedown.png" type="Texture" id=4]
+[ext_resource path="res://assets/silhouette-man.jpg" type="Texture" id=5]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask_texture;
+
+void fragment() {
+    vec4 colour = COLOR;
+    colour.a *= texture(mask_texture, UV).a;
+
+    COLOR = colour;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/mask_texture = ExtResource( 2 )
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask_texture;
+uniform vec4 colour_modulate;
+
+void fragment() {
+    vec4 colour = texture(TEXTURE, UV);
+	colour *= colour_modulate;
+    colour.a = texture(mask_texture, UV).a;
+	
+//	colour.r += colour_modulate.r;
+//	colour.g += colour_modulate.g;
+//	colour.b += colour_modulate.b;
+
+    COLOR = colour;
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
+shader = SubResource( 3 )
+shader_param/colour_modulate = Vector3( 0, 0.7, 0 )
+shader_param/mask_texture = ExtResource( 2 )
+
+[sub_resource type="DynamicFontData" id=5]
+font_path = "res://assets/Roboto-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=6]
+size = 40
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 5 )
+
+[node name="Individual" type="Control"]
+script = ExtResource( 1 )
+
+[node name="container" type="CenterContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -200.0
+margin_top = -350.0
+margin_right = 200.0
+margin_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="container"]
+material = SubResource( 2 )
+margin_right = 450.0
+margin_bottom = 700.0
+rect_min_size = Vector2( 450, 700 )
+mouse_filter = 1
+color = Color( 0.392157, 0.588235, 0.862745, 1 )
+
+[node name="LeavesUp" type="TextureRect" parent="container/ColorRect"]
+margin_left = -55.5713
+margin_top = -34.8936
+margin_right = 744.429
+margin_bottom = 565.106
+rect_scale = Vector2( 0.7, 0.7 )
+rect_clip_content = true
+texture = ExtResource( 3 )
+
+[node name="LeavesLow" type="TextureRect" parent="container/ColorRect"]
+margin_left = 505.739
+margin_top = 709.231
+margin_right = 1305.74
+margin_bottom = 1309.23
+rect_rotation = 180.0
+rect_scale = Vector2( 0.7, 0.7 )
+texture = ExtResource( 3 )
+
+[node name="Banderole" type="TextureRect" parent="container/ColorRect"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -500.0
+margin_top = 400.0
+margin_right = 50.0
+margin_bottom = -50.0
+rect_min_size = Vector2( 550, 300 )
+texture = ExtResource( 4 )
+expand = true
+
+[node name="vbox" type="VBoxContainer" parent="container"]
+margin_left = 25.0
+margin_top = 23.0
+margin_right = 425.0
+margin_bottom = 677.0
+
+[node name="hbox" type="HBoxContainer" parent="container/vbox"]
+margin_left = 25.0
+margin_right = 375.0
+margin_bottom = 450.0
+rect_min_size = Vector2( 300, 450 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="image" type="TextureRect" parent="container/vbox/hbox"]
+material = SubResource( 4 )
+margin_right = 350.0
+margin_bottom = 450.0
+rect_min_size = Vector2( 350, 375 )
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+
+[node name="text" type="RichTextLabel" parent="container/vbox"]
+margin_top = 454.0
+margin_right = 400.0
+margin_bottom = 654.0
+rect_min_size = Vector2( 400, 200 )
+mouse_filter = 1
+custom_fonts/normal_font = SubResource( 6 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Langer Vorname 
+Nachname
+1950 - 2010
+Ort oder Stadt
+[/center]"
+text = "Langer Vorname 
+Nachname
+1950 - 2010
+Ort oder Stadt
+"
+scroll_active = false
+[connection signal="mouse_entered" from="container" to="." method="_on_container_mouse_entered"]
+[connection signal="mouse_exited" from="container" to="." method="_on_container_mouse_exited"]

@@ -1,0 +1,13 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+uniform sampler2D mask_texture;
+
+void fragment() {
+    vec4 colour = COLOR;
+    colour.a *= texture(mask_texture, UV).a;
+
+    COLOR = colour;
+}"

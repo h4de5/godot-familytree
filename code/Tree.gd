@@ -2,7 +2,7 @@ extends Control
 
 #const Individual = preload("Individual.gd")
 #const Family = preload("Family.gd")
-const Individual = preload("res://code/Individual.tscn")
+const Individual = preload("res://code/Individual2.tscn")
 const Family = preload("res://code/Family.tscn")
 const Branch = preload("res://code/Branch.tscn")
 
@@ -15,11 +15,13 @@ var level_counts = {}
 
 func _enter_tree():
 	if poi != null:
+		print("Rendering tree for Person: "+ poi.uid)
 		# print person of interest
 		# should be 0
 		var column = getFreePosition(0, 0, 0)
 		poi.setPosition(calcPosition(0, column))
 		poi.setScale( 1 )
+		poi.setLevel(0)
 		add_child(poi)
 		renderPartners(poi.uid, 0, 0, 1, 1)
 		renderSiblings(poi.uid, 0, 0, -1)
@@ -52,6 +54,9 @@ func renderBranch(child, parents):
 	add_child(branch)
 
 func renderParents(child, level, column = 0):
+	if abs(level) >= config.maxLevel:
+		return
+
 	var individuals = findParents(child.uid)
 	if individuals:
 		# first parent will go to the left
@@ -76,6 +81,7 @@ func renderParents(child, level, column = 0):
 				# render individual
 				individual.setPosition( calcPosition(level, newcolumn) )
 				individual.setScale( 1 )
+				individual.setLevel(level)
 				add_child(individual)
 
 				renderParents(individual, level-1, newcolumn)
@@ -89,6 +95,7 @@ func renderChildren(id, level):
 		for individual in individuals:
 			if individual:
 				individual.setPosition( getFreePosition(level) )
+				individual.setLevel(level)
 				add_child(individual)
 				renderChildren(individual.uid, level+1)
 
@@ -104,6 +111,7 @@ func renderPartners(id, level, column, side, scale):
 				newcolumn += i * side * 0.1
 				individual.setPosition( calcPosition(level,  newcolumn) )
 				individual.setScale( scale )
+				individual.setLevel(level)
 				add_child(individual)
 				i += 1
 
@@ -126,6 +134,7 @@ func renderSiblings(id, level, column, side):
 				newcolumn += i * side * 0.1
 				individual.setPosition( calcPosition(level,  newcolumn) )
 				individual.setScale( 0.65 )
+				individual.setLevel(level)
 				add_child(individual)
 				var partners = renderPartners(individual.uid, level, newcolumn, side, 0.65)
 				# add spaces between partners and next sibling
@@ -237,6 +246,9 @@ func addFamily(id, husband, wife, children, date, location):
 
 # iterates through a tree to get the deepest leaf
 func getDepth(uid, level = 1):
+	if abs(level) >= config.maxLevel-1:
+		return level
+
 	var parents = findParents(uid)
 	if parents:
 #		level = level + 1
@@ -249,7 +261,7 @@ func getDepth(uid, level = 1):
 # get rightest and leftest element up the tree
 # yes - rightest and leftest .. those are words now
 # side = 1..right, -1..left
-func getMaxRightLeft(uid, side = 0):
+func getMaxRightLeft(uid, level = 0, side = 0):
 	var rightest = 0
 	var leftest = 0
 
@@ -260,7 +272,7 @@ func getMaxRightLeft(uid, side = 0):
 			if node:
 				var maxrightleft
 
-				maxrightleft = getMaxRightLeft(node.uid)
+				maxrightleft = getMaxRightLeft(node.uid, level - 1)
 
 				# husband - left .. == 0
 				# wife right .. == 1

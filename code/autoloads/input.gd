@@ -7,8 +7,8 @@ var mousedown = false
 var mouselastup = Vector2(0,0)
 var mousefirstdown = Vector2(0,0)
 var touchdowns = {}
-var touchdistance = 0
-var touchzoom = Vector2(0,0)
+#var touchdistance = 0
+#var touchzoom = Vector2(0,0)
 var delta_max = 0
 var current_hover_node = null
 
@@ -106,7 +106,7 @@ func _input(event):
 			mousezoom = Vector2(1,1)
 			zooming = true
 
-		if event.button_index == BUTTON_MIDDLE and current_hover_node != null:
+		if event.button_index == BUTTON_MIDDLE and event.is_pressed() and current_hover_node != null:
 			get_node("/root/main").setPersonOfInterest(current_hover_node.uid)
 			current_hover_node = null
 	elif event is InputEventKey and event.is_pressed():
@@ -116,13 +116,19 @@ func _input(event):
 			add_child(screenshot)
 
 			var tree_scene = get_node("/root/main/Tree")
-			screenshot.prepare(tree_scene, tree_scene.getBoundaries(), get_viewport())
-			yield(get_tree(),"idle_frame")
-			yield(get_tree(),"idle_frame")
-#			get_tree().change_scene_to(Screenshot)
+			var poi_uid = tree_scene.poi.uid
 
-			screenshot.capture("screenshot.png")
-			get_parent().remove_child(screenshot)
+			screenshot.prepare(tree_scene, tree_scene.getBoundaries(), get_viewport(), get_tree(), config.outputFactor)
+#
+			yield(get_tree(),"idle_frame")
+			yield(get_tree(),"idle_frame")
+###			get_tree().change_scene_to(Screenshot)
+##
+			#screenshot.capture(config.outputDirectory +  "/familyTree-"+ config.personOfInterest + ".png")
+			screenshot.capture(config.outputDirectory +  "/familytree-"+ poi_uid + ".png")
+
+#			get_parent().remove_child(screenshot)
+			screenshot.cleanup()
 
 #			get_tree().change_scene("/root/main")
 

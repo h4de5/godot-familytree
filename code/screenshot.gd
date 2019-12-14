@@ -9,7 +9,7 @@ var viewport
 func _ready():
 	pass # Replace with function body.
 
-func prepare(scene_to_capture : Node, visible_rect : Rect2, current_viewport: Viewport, factor = 2.0):
+func prepare(scene_to_capture : Node, visible_rect : Rect2, current_viewport: Viewport, current_tree : SceneTree, factor = 0.5):
 #			var image = get_viewport().get_texture().get_data()
 	viewport = get_node("ViewportContainer/Viewport")
 
@@ -40,13 +40,27 @@ func prepare(scene_to_capture : Node, visible_rect : Rect2, current_viewport: Vi
 
 	# position the camera
 	viewport.get_node("Camera2D").position = visible_rect.position + visible_rect.size/2
-	viewport.get_node("Camera2D").zoom = Vector2(factor, factor)
+	viewport.get_node("Camera2D").zoom = Vector2(1/factor, 1/factor)
 
 	# enlarge the viewport to the to be visible rect
-	viewport.size = visible_rect.size / factor
+	viewport.size = visible_rect.size * factor
 
 	# make camera current for the screenshot
 	viewport.get_node("Camera2D").make_current()
+	#call_deferred("capture")
+#
+#	yield(current_tree,"idle_frame")
+#	yield(current_tree,"idle_frame")
+#	yield(current_tree,"idle_frame")
+#	yield(current_tree,"idle_frame")
+#
+###			get_tree().change_scene_to(Screenshot)
+##
+#	capture("screenshot.png")
+	#current_tree.remove_child(self)
+
+func cleanup():
+	get_parent().remove_child(self)
 
 func capture(filename = "screenshot.png"):
 	# wait 2 frames

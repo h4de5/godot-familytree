@@ -1,4 +1,19 @@
+; config values about the family tree
 [familytree]
+; name of the GED file to be loaded
 filename="Stammbaum.ged"
+; directory where the GED file and images are located
 directory="_familytree/"
+; when used as web plugin, files are loaded from that url (directory will be added to this url)
 server="https://www.example.com/path/"
+; max depth of ancestores
+max_level=10
+; ID from person of interest - root of the family tree
+poi="I1"
+; settings regarding the output
+[output]
+; output directory - default users home
+; backslashes needs to be doubled: \\
+directory="user://"
+; zoom factor of output image, only lower than 1, too big renders may crash
+factor=0.5
