@@ -54,7 +54,7 @@ func renderBranch(child, parents):
 	add_child(branch)
 
 func renderParents(child, level, column = 0):
-	if abs(level) >= config.maxLevel:
+	if abs(level) >= config.maxLevel+1:
 		return
 
 	var individuals = findParents(child.uid)
@@ -67,7 +67,7 @@ func renderParents(child, level, column = 0):
 				var newcolumn = 0
 				# DONE - siblings müssen schon vor freepositions abgeholt werden
 				# falls anzahl der geschwister > is maxdepth in die entsprechende richtung, muss leftest/rightest erhöht werden
-				var maximums = getMaxRightLeft(individual.uid, side)
+				var maximums = getMaxRightLeft(individual.uid, level, side)
 
 #				individual.setTitle(str(maximums[0]) + '/'+ str(maximums[1]) + individual.to_string())
 #				individual.personname = str(maximums[0]) + '/'+ str(maximums[1]) + individual.personname
@@ -246,7 +246,7 @@ func addFamily(id, husband, wife, children, date, location):
 
 # iterates through a tree to get the deepest leaf
 func getDepth(uid, level = 1):
-	if abs(level) >= config.maxLevel-1:
+	if abs(level) >= config.maxLevel:
 		return level
 
 	var parents = findParents(uid)
@@ -264,6 +264,9 @@ func getDepth(uid, level = 1):
 func getMaxRightLeft(uid, level = 0, side = 0):
 	var rightest = 0
 	var leftest = 0
+
+	if abs(level) >= config.maxLevel:
+		return [leftest,rightest]
 
 	var parents = findParents(uid)
 	if parents:

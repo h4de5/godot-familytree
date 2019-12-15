@@ -69,7 +69,9 @@ func setImage(texture):
 		get_node("container/vbox/hbox").hide()
 
 func setLevel(_level):
+	#print ("Set Level to "+ str(_level) + " (was "+ str(self.level) +") for " + self.personname)
 	self.level = _level
+	setTitle(to_string())
 
 
 func getTexture(path, imagename):
@@ -154,7 +156,7 @@ func to_string():
 #	return  uid.to_upper() + "\n" + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
 
 	# lastname first
-	var nameparts = personname.rsplit(" ", false, 1)
+	var nameparts = self.personname.rsplit(" ", false, 1)
 	var lastname
 	var firstname
 	if nameparts[1] != '...':
@@ -167,10 +169,11 @@ func to_string():
 		firstname = ''
 
 	# reformat date to year only
+	var birth_year
 
-	return  str(level) + " " + lastname + firstname + \
- 		birth +" - "+ death + "\n"+ \
-		location.capitalize()
+	return lastname + firstname + \
+ 		self.birth +" - "+ self.death + "\n"+ \
+		self.location.capitalize()
 #		occupation.capitalize() + "\n" + \
 
 
