@@ -169,10 +169,24 @@ func to_string():
 		firstname = ''
 
 	# reformat date to year only
-	var birth_year
+	var birth_year = ''
+	var death_year = ''
+	var life = ''
 
-	return lastname + firstname + \
- 		self.birth +" - "+ self.death + "\n"+ \
+	if self.birth:
+		birth_year = self.birth.substr(self.birth.length()-4,4)
+	if self.death:
+		death_year = self.death.substr(self.death.length()-4,4)
+		print(self.death)
+
+	if birth_year and death_year:
+		life = birth_year + ' - ' + death_year + "\n"
+	elif death_year:
+		life = "+" + death_year + "\n"
+	elif birth_year:
+		life = birth_year + "\n"
+
+	return lastname + firstname + life + \
 		self.location.capitalize()
 #		occupation.capitalize() + "\n" + \
 

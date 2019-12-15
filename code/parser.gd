@@ -105,7 +105,7 @@ func parse (tree , filebody : String):
 		if _line.find("1 BIRT") == 0:
 			current_group = "birth"
 		elif _line.find("1 DEAT") == 0:
-			current_group = "birth"
+			current_group = "death"
 		elif _line.find("1 OBJE") == 0:
 			current_group = "image"
 		elif _line.find("1 MARR") == 0:
