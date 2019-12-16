@@ -32,11 +32,6 @@ void fragment() {
     vec4 colour = texture(TEXTURE, UV);
 	colour *= colour_modulate;
     colour.a = texture(mask_texture, UV).a;
-	
-//	colour.r += colour_modulate.r;
-//	colour.g += colour_modulate.g;
-//	colour.b += colour_modulate.b;
-
     COLOR = colour;
 }"
 

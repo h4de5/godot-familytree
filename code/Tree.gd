@@ -173,7 +173,7 @@ func calcPosition(level, column):
 	var container = poi.getRect()
 	return Vector2(
 		(container.size.x * 0.6 + margin) * column,
-		(container.size.y + margin) * level * 1.2
+		(container.size.y + margin) * level * 1.3
 	)
 
 #	return Vector2(

@@ -177,7 +177,6 @@ func to_string():
 		birth_year = self.birth.substr(self.birth.length()-4,4)
 	if self.death:
 		death_year = self.death.substr(self.death.length()-4,4)
-		print(self.death)
 
 	if birth_year and death_year:
 		life = birth_year + ' - ' + death_year + "\n"
