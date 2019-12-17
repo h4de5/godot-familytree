@@ -31,16 +31,17 @@ func _enter_tree():
 		renderParents(poi, -1)
 
 func _exit_tree():
-	for i in range(get_child_count(), 0, -1):
-#		get_child(i).queue_free()
-		remove_child(get_child(i-1))
+	for i in range(get_child_count()-1, -1, -1):
+		# if we free everything
+		# they will not be added to the individuals list anymore
+		# because parser is only called once
+		# get_child(i).queue_free()
+		remove_child(get_child(i))
 	level_counts = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("im ready tree")
-
-
+	print("Tree is ready")
 
 # funcs used for visualization
 
@@ -89,6 +90,7 @@ func renderParents(child, level, column = 0):
 			side *= -1
 		renderBranch(child, individuals)
 
+# not in use
 func renderChildren(id, level):
 	var individuals = findChildren(id)
 	if individuals:
@@ -112,6 +114,7 @@ func renderPartners(id, level, column, side, scale):
 				individual.setPosition( calcPosition(level,  newcolumn) )
 				individual.setScale( scale )
 				individual.setLevel(level)
+				individual.setSwitchSide(side)
 				add_child(individual)
 				i += 1
 
@@ -135,6 +138,8 @@ func renderSiblings(id, level, column, side):
 				individual.setPosition( calcPosition(level,  newcolumn) )
 				individual.setScale( 0.65 )
 				individual.setLevel(level)
+				# if siblings are rendered, women and man look the other way
+				individual.setSwitchSide(side * -1)
 				add_child(individual)
 				var partners = renderPartners(individual.uid, level, newcolumn, side, 0.65)
 				# add spaces between partners and next sibling
@@ -168,12 +173,14 @@ func getFreePosition(level, childcolumn = 0, parentmax = [0,0], side = 0):
 
 func calcPosition(level, column):
 	# level is y position of the node
-	var margin = 0
+	var margin_width = 0
+	var margin_height = 0
 
 	var container = poi.getRect()
+	# print('poi container: ', container)
 	return Vector2(
-		(container.size.x * 0.6 + margin) * column,
-		(container.size.y + margin) * level * 1.3
+		(container.size.x * 0.55 + margin_width) * column,
+		(container.size.y + margin_height) * level * 1.3
 	)
 
 #	return Vector2(
@@ -189,13 +196,7 @@ func getBoundaries():
 			if node is preload("Individual.gd"):
 				var container = node.getRectAbsolute()
 				boundaries = boundaries.merge(container)
-#				bound_lower.x = min(bound_lower.position.x, container.position.x)
-#				bound_lower.y = min(bound_lower.position.y, container.position.y)
-#				bound_upper.x = max(bound_upper.position.x, container.position.x)
-#				bound_upper.y = max(bound_upper.position.y, container.position.y)
-#
-#				boundaries.size.x = max(boundaries.size.x, abs(bound_lower.position.x) + bound_upper.posi + container.size.x))
-#				boundaries.size.y = max(boundaries.size.y, abs(container.position.y + container.size.y))
+		boundaries.grow(50)
 	return boundaries
 
 func arrmax(arr):
@@ -219,8 +220,12 @@ func newFamily(fid):
 	return _families.size()-1
 
 func setIndividualField(index, field, value):
+	# do not overwrite exisiting values
 	if _individuals[index][field] == '':
 		_individuals[index][field] = value
+	# set name of the element in scene-tree
+	if field == 'personname':
+		_individuals[index].name = 'Individual '+ value
 
 func setFamilyField(index, field, value):
 	if field == 'children':

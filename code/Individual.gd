@@ -13,39 +13,59 @@ var imagepath = ""
 
 var level = 0
 var color = Color(0,0,0,0)
-var silhouette = ''
+var silhouette = 'silhouette-man.jpg'
+# if usualle man are left and woman are right, therefor silhouetts look at each other
+# if siblings are rendered, man can be right and woman can be left - which need corrections
+var switch_side = false
+var side = 0
 
 
 # for visualization
 #var column = 0
 
 # Called when the node enters the scene tree for the first time.
+# will not be called on any tree poi change!
 func _ready():
 	#print("im ready individual: " + uid)
 	#get_node("container/vbox/text").push_align(RichTextLabel.ALIGN_CENTER)
 	setTitle(to_string())
+	
+	var texture_rect = get_node("container/vbox/hbox/Control/image")
 
 	if gender.to_upper() == "M":
 #		color = Color(0.5, 0.6, 0.9, 1)
 		color = Color('#DBD9FF')
-		get_node("container/vbox/hbox/image").material.set_shader_param("colour_modulate", Color(0.9, 0.9, 1, 1))
+		texture_rect.material.set_shader_param("colour_modulate", Color(0.9, 0.9, 1, 1))
 		silhouette = 'silhouette-man.jpg'
-
+		
 	elif gender.to_upper() == "W" or gender.to_upper() == "F":
 #		color = Color(0.9, 0.6, 0.5, 1)
 		color = Color('#FFD9D9')
-		get_node("container/vbox/hbox/image").material.set_shader_param("colour_modulate", Color(1, 0.9, 0.9, 1))
+		texture_rect.material.set_shader_param("colour_modulate", Color(1, 0.9, 0.9, 1))
 		silhouette = 'silhouette-woman.jpg'
-
+		
 	get_node("container/ColorRect").color = color
 
 	if image and imagepath:
 		setImage(getTexture(imagepath, image))
+		# if image was set, remove silhouette and possible side switch
+		silhouette = ''
+		switch_side = false
+		side = 0
 	else:
 		setImage(load("res://assets/"+silhouette))
-		#get_node("container/vbox/hbox").hide()
+		setSwitchSide(side)
+
 
 # funcs used for visualization
+
+
+func getRect():
+	return Rect2(get_node("container").rect_position, get_node("container").rect_size * get_node("container").rect_scale )
+	
+func getRectAbsolute():
+	# main container does not have a size
+	return Rect2(rect_position + get_node("container").rect_position, get_node("container").rect_size * get_node("container").rect_scale )
 
 func setScale(factor = 1):
 	get_node("container").rect_scale = Vector2(factor, factor)
@@ -53,27 +73,43 @@ func setScale(factor = 1):
 func setPosition(rect):
 	rect_position = rect
 
-func getRect():
-	return Rect2(get_node("container").rect_position, get_node("container").rect_size * get_node("container").rect_scale )
-func getRectAbsolute():
-	# main container does not have a size
-	return Rect2(rect_position + get_node("container").rect_position, get_node("container").rect_size * get_node("container").rect_scale )
-	#return Rect2(rect_position, rect_size)
-
-
 func setImage(texture):
 	if texture:
 		get_node("container/vbox/hbox").show()
-		get_node("container/vbox/hbox/image").texture = texture
+		get_node("container/vbox/hbox/Control/image").texture = texture
 	else:
 		get_node("container/vbox/hbox").hide()
 
 func setLevel(_level):
 	#print ("Set Level to "+ str(_level) + " (was "+ str(self.level) +") for " + self.personname)
 	self.level = _level
+	# for some reason, _ready is not called when rerendering all elements
 	setTitle(to_string())
 
+func setTitle(text):
+	get_node("container/vbox/text").bbcode_text = "[center]" + text + "[/center]"
+	
+func setSwitchSide(_side = 0):
+	if self.silhouette:
+		side = _side
+		switch_side = false
+		if _side == -1 and gender != 'M':
+			switch_side = true
+		if _side == 1 and gender != 'F':
+			switch_side = true
+					
+		var texture_rect = get_node("container/vbox/hbox/Control/image")
+		
+		if switch_side:
+			texture_rect.rect_scale.x = -1
+			texture_rect.rect_position.x = texture_rect.rect_size.x
+			# print("switching side for: "+ self.personname)
+		else:
+			texture_rect.rect_scale.x = 1
+			texture_rect.rect_position.x = 0
 
+
+# for image retrival
 func getTexture(path, imagename):
 	path = path.replace("\\", "/").lstrip("./");
 	imagename = imagename.replace("\\", "/");
@@ -134,10 +170,6 @@ func on_request_completed(result, response_code, headers, body, params = []):
 
 	else:
 		printerr("Request failed - Code: ", result, " HTTP Status: ", response_code)
-
-
-func setTitle(text):
-	get_node("container/vbox/text").bbcode_text = "[center]" + text + "[/center]"
 
 # funcs used for building upfamilytree data
 
