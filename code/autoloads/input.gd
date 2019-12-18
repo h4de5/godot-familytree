@@ -18,7 +18,7 @@ func _process(delta):
 	if delta_max > 0:
 		delta_max -= delta
 
-	elif has_node("/root/main/Tree"):
+	elif has_node("/root/main/Center/VBox/Tree"):
 		delta_max = 0.01
 #		print("size ", get_viewport().size)
 #		print("rect_size ", get_node("Tree").rect_size)
@@ -26,10 +26,10 @@ func _process(delta):
 #		var boundaries = get_node("Tree").getBoundaries()
 
 #		if mousepos != Vector2(0,0):
-		if mousepos != get_node("/root/main/Camera2D").position:
-			get_node("/root/main/Camera2D").position = mousepos
+		if mousepos != get_node("/root/main/Camera").position:
+			get_node("/root/main/Camera").position = mousepos
 		if zooming :
-			get_node("/root/main/Camera2D").zoom = mousezoom
+			get_node("/root/main/Camera").zoom = mousezoom
 			zooming = false
 
 #		else:
@@ -115,7 +115,7 @@ func _input(event):
 			var screenshot = Screenshot.instance()
 			add_child(screenshot)
 
-			var tree_scene = get_node("/root/main/Tree")
+			var tree_scene = get_node("/root/main/Center")
 			var poi_uid = tree_scene.poi.uid
 
 			screenshot.prepare(tree_scene, tree_scene.getBoundaries(), get_viewport(), get_tree(), config.outputFactor)

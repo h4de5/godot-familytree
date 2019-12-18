@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/arch-with-green-leaves-and-tree-branches-png-image-1114.png-5c8441fe47dfcfd8f5e9ed29a9615765.stex"
+path="res://.import/leaves-arch.png-64c921b7630f4965fd02c6f5f5f9c7ae.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/arch-with-green-leaves-and-tree-branches-png-image-1114.png"
-dest_files=[ "res://.import/arch-with-green-leaves-and-tree-branches-png-image-1114.png-5c8441fe47dfcfd8f5e9ed29a9615765.stex" ]
+source_file="res://assets/leaves-arch.png"
+dest_files=[ "res://.import/leaves-arch.png-64c921b7630f4965fd02c6f5f5f9c7ae.stex" ]
 
 [params]
 

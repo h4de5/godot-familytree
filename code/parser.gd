@@ -70,10 +70,6 @@ func file_ready(tree, filebody: String):
 		tree = generateExample(tree)
 		get_node("/root/main").setPersonOfInterest("I1")
 
-
-
-
-
 func parse (tree , filebody : String):
 
 	var _index = 0

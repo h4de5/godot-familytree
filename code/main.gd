@@ -38,12 +38,13 @@ func start_parser():
 
 
 func setPersonOfInterest(uid):
-
-#	for i in range(0, get_child_count()):
-#		get_child(i).queue_free()
-
-	if has_node("Tree"):
+	if has_node("Center/VBox/Tree"):
 #		get_node("Tree").queue_free()
-		remove_child(get_node("Tree"))
+		get_node("Center/VBox").remove_child(get_node("Center/VBox/Tree"))
 	tree.poi = tree.findIndividual(uid)
-	add_child(tree)
+
+	if tree.poi:
+		get_node("Center/VBox/Headline").bbcode_text = "[center]Ahnentafel von "+ tree.poi.getNameFormated()+ "[/center]"
+		get_node("Center/VBox").add_child(tree)
+	else:
+		printerr("cannot find individual with id: "+ uid)
