@@ -189,8 +189,6 @@ func calcPosition(level, column):
 
 func getBoundaries():
 	var boundaries = Rect2(0,0,0,0)
-	var bound_lower = Vector2(0,0)
-	var bound_upper = Vector2(0,0)
 	if get_children():
 		for node in get_children():
 			if node is preload("Individual.gd"):

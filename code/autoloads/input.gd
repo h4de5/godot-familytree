@@ -18,7 +18,7 @@ func _process(delta):
 	if delta_max > 0:
 		delta_max -= delta
 
-	elif has_node("/root/main/Center/VBox/Tree"):
+	elif has_node("/root/main/Center/VBox/TreeContainer/Tree"):
 		delta_max = 0.01
 #		print("size ", get_viewport().size)
 #		print("rect_size ", get_node("Tree").rect_size)
@@ -110,15 +110,75 @@ func _input(event):
 			get_node("/root/main").setPersonOfInterest(current_hover_node.uid)
 			current_hover_node = null
 	elif event is InputEventKey and event.is_pressed():
+		if event.scancode == KEY_2:
+
+			# MUUUUCH EASIER without separete viewport
+			var tree_scene = get_node("/root/main/Center/VBox/TreeContainer/Tree")
+			var headline_scene = get_node("/root/main/Center/VBox/Headline")
+			# var visible_rect = tree_scene.getBoundaries()
+			var visible_rect = Rect2(get_node("/root/main/Center").rect_position, get_node("/root/main/Center").rect_size)
+
+			var factor = config.outputFactor
+			var poi_uid = tree_scene.poi.uid
+			var filename = config.outputDirectory +  "/familytree-"+ poi_uid + ".png"
+
+			var original_size = get_viewport().size
+			var original_camera_pos = get_node("/root/main/Camera").position
+			var original_camera_zoom = get_node("/root/main/Camera").zoom
+
+			get_viewport().size = visible_rect.size * factor
+
+			yield(get_tree(),"idle_frame")
+			yield(get_tree(),"idle_frame")
+
+			# position the camera
+			# get_node("/root/main/Camera").position = visible_rect.position * factor + visible_rect.size/2
+
+			get_node("/root/main/Camera").smoothing_enabled = false
+			get_node("/root/main/Camera").position = get_viewport().size / 2
+			get_node("/root/main/Camera").zoom = Vector2(1/factor, 1/factor)
+
+
+			yield(get_tree(),"idle_frame")
+			yield(get_tree(),"idle_frame")
+
+			# get screenshot data
+			var image = get_viewport().get_texture().get_data()
+			# flip it because it needs to be flipped
+			image.flip_y()
+			# save it as png
+			image.save_png(filename)
+
+			var attack_timer = get_tree().create_timer(2.0)
+			yield(attack_timer, "timeout")
+
+			get_viewport().size = original_size
+			get_node("/root/main/Camera").position = original_camera_pos
+			get_node("/root/main/Camera").zoom = original_camera_zoom
+			get_node("/root/main/Camera").smoothing_enabled = true
+
+
+
+
 		if event.scancode == KEY_1:
 			var Screenshot = load("res://code/Screenshot.tscn")
 			var screenshot = Screenshot.instance()
 			add_child(screenshot)
 
-			var tree_scene = get_node("/root/main/Center")
+			var screenshot_scene = get_node("/root/main/Center")
+			var tree_scene = get_node("/root/main/Center/VBox/TreeContainer/Tree")
+			var headline_scene = get_node("/root/main/Center/VBox/Headline")
 			var poi_uid = tree_scene.poi.uid
 
-			screenshot.prepare(tree_scene, tree_scene.getBoundaries(), get_viewport(), get_tree(), config.outputFactor)
+			var rect = tree_scene.getBoundaries()
+			print("tree boundaries: ", rect)
+
+			print("headline boundaries: ", Rect2(headline_scene.rect_position, headline_scene.rect_size))
+			rect.merge(Rect2(headline_scene.rect_position, headline_scene.rect_size))
+
+			print("tree inlcuding headline: ", rect)
+
+			screenshot.prepare(screenshot_scene, rect, get_viewport(), get_tree(), config.outputFactor)
 #
 			yield(get_tree(),"idle_frame")
 			yield(get_tree(),"idle_frame")

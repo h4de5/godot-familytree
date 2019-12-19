@@ -38,13 +38,63 @@ func start_parser():
 
 
 func setPersonOfInterest(uid):
-	if has_node("Center/VBox/Tree"):
+	if has_node("Center/VBox/TreeContainer/Tree"):
 #		get_node("Tree").queue_free()
-		get_node("Center/VBox").remove_child(get_node("Center/VBox/Tree"))
+		get_node("Center/VBox/TreeContainer").remove_child(get_node("Center/VBox/TreeContainer/Tree"))
 	tree.poi = tree.findIndividual(uid)
 
 	if tree.poi:
-		get_node("Center/VBox/Headline").bbcode_text = "[center]Ahnentafel von "+ tree.poi.getNameFormated()+ "[/center]"
-		get_node("Center/VBox").add_child(tree)
+		get_node("Center/VBox/Center/Headline").bbcode_text = "[center]Ahnentafel von "+ tree.poi.getNameFormated()+ "[/center]"
+		#get_node("Center/VBox/Headline").text = "[center]Ahnentafel von "+ tree.poi.getNameFormated()+ "[/center]"
+		get_node("Center/VBox/TreeContainer").add_child(tree)
+		call_deferred("update_tree_size")
 	else:
 		printerr("cannot find individual with id: "+ uid)
+
+func update_tree_size():
+	var rect = tree.getBoundaries()
+	#print("calculated rect size: ", rect.size)
+	#print("calculated rect position: ", rect.position.abs())
+
+	position = Vector2(0,0)
+	get_node("Center").rect_position = Vector2(0,0)
+	yield(get_tree(),"idle_frame")
+
+	get_node("Center").rect_min_size.x = rect.size.x
+	yield(get_tree(),"idle_frame")
+
+	get_node("Center/VBox").rect_min_size.x = rect.size.x
+	yield(get_tree(),"idle_frame")
+
+	var fontsize = rect.size.x / 45
+	get_node("Center/VBox/Center/Headline").rect_min_size.x = rect.size.x
+	get_node("Center/VBox/Center/Headline").rect_min_size.y = fontsize * 1.1
+	yield(get_tree(),"idle_frame")
+
+	# does not work
+	# get_node("Center/VBox/Headline").get_font('font').size = 200
+	# see: https://godotengine.org/qa/42430/changing-font-size-of-theme-or-control-at-runtime
+	# var font = get_node("Center/VBox/Headline").get_font("string_name", "normal_font")
+	var dynamic_font = DynamicFont.new()
+	dynamic_font.font_data = load("res://assets/Medici Text.ttf")
+	dynamic_font.size = fontsize
+	dynamic_font.use_filter = true
+	dynamic_font.use_mipmaps = true
+	get_node("Center/VBox/Center/Headline").set("custom_fonts/normal_font", dynamic_font)
+	yield(get_tree(),"idle_frame")
+
+	get_node("Center/VBox/Center/Headline").bbcode_text += ""
+	yield(get_tree(),"idle_frame")
+
+
+	get_node("Center/Background").rect_min_size = rect.grow(200).grow_individual(0, fontsize*2, 0, 0 ).size
+	yield(get_tree(),"idle_frame")
+
+	get_node("Center/VBox/Center").rect_position = rect.position
+	yield(get_tree(),"idle_frame")
+
+	get_node("Center/VBox/TreeContainer").rect_min_size = rect.size
+	yield(get_tree(),"idle_frame")
+
+	get_node("Center/VBox/TreeContainer/Tree").rect_position = rect.position.abs()
+	yield(get_tree(),"idle_frame")

@@ -184,7 +184,7 @@ func node_init(_uid, _personname, _birth, _death, _occupation, _location, _gende
 	self.image = _image
 	self.imagepath = _imagepath
 
-func getNameFormated():
+func getNameFormated(trim = true):
 	var nameparts = self.personname.rsplit(" ", false, 1)
 	var lastname
 	var firstname
@@ -198,7 +198,10 @@ func getNameFormated():
 	else:
 		firstname = ''
 	# lastname first
-	return lastname + firstname
+	if trim:
+		return lastname.strip_edges() +" "+ firstname.strip_edges()
+	else:
+		return lastname + firstname
 
 func to_string():
 #	return  uid.to_upper() + "\n" + personname.capitalize() + " ["+ gender.to_upper() +"]\n("+birth+" - "+death+")\n"+ occupation.capitalize() + " " + location.capitalize();
@@ -220,7 +223,7 @@ func to_string():
 	elif birth_year:
 		life = birth_year + "\n"
 
-	return self.getNameFormated() + life + \
+	return self.getNameFormated(false) + life + \
 		self.location.capitalize()
 #		occupation.capitalize() + "\n" + \
 

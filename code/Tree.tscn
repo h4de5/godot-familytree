@@ -3,4 +3,8 @@
 [ext_resource path="res://code/Tree.gd" type="Script" id=1]
 
 [node name="Tree" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 1 )
