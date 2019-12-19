@@ -37,12 +37,16 @@ func _ready():
 		color = Color('#DBD9FF')
 		texture_rect.material.set_shader_param("colour_modulate", Color(0.9, 0.9, 1, 1))
 		silhouette = 'silhouette-man.jpg'
+		get_node("container/ColorRect/LeavesUpM").visible = true
+		get_node("container/ColorRect/LeavesUpF").visible = false
 
 	elif gender.to_upper() == "W" or gender.to_upper() == "F":
 #		color = Color(0.9, 0.6, 0.5, 1)
 		color = Color('#FFD9D9')
 		texture_rect.material.set_shader_param("colour_modulate", Color(1, 0.9, 0.9, 1))
 		silhouette = 'silhouette-woman.jpg'
+		get_node("container/ColorRect/LeavesUpM").visible = false
+		get_node("container/ColorRect/LeavesUpF").visible = true
 
 	get_node("container/ColorRect").color = color
 

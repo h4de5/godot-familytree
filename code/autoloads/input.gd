@@ -128,7 +128,7 @@ func _input(event):
 
 			get_viewport().size = visible_rect.size * factor
 
-			yield(get_tree(),"idle_frame")
+
 			yield(get_tree(),"idle_frame")
 
 			# position the camera
@@ -139,6 +139,8 @@ func _input(event):
 			get_node("/root/main/Camera").zoom = Vector2(1/factor, 1/factor)
 
 
+			yield(get_tree(),"idle_frame")
+			yield(get_tree(),"idle_frame")
 			yield(get_tree(),"idle_frame")
 			yield(get_tree(),"idle_frame")
 

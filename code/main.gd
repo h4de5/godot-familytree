@@ -52,9 +52,29 @@ func setPersonOfInterest(uid):
 		printerr("cannot find individual with id: "+ uid)
 
 func update_tree_size():
+
+
 	var rect = tree.getBoundaries()
-	#print("calculated rect size: ", rect.size)
-	#print("calculated rect position: ", rect.position.abs())
+
+	var tree_node = get_node("Center/VBox/TreeContainer/Tree")
+
+	# should be x variable
+	var moving_by = 0
+
+	if tree_node.move_to_center.size():
+		for node in tree_node.move_to_center:
+			if node is preload("Individual.gd"):
+				if moving_by == 0:
+					moving_by = rect.size.x/2 - node.rect_position.x + rect.position.x
+				node.rect_position.x += moving_by
+			if node is preload("Branch.gd"):
+				yield(get_tree(),"idle_frame")
+				node.setIndividuals(null, null)
+
+
+
+	print("calculated rect size: ", rect.size)
+	print("calculated rect position: ", rect.position.abs())
 
 	position = Vector2(0,0)
 	get_node("Center").rect_position = Vector2(0,0)

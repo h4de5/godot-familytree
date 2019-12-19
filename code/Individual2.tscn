@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://code/Individual.gd" type="Script" id=1]
 [ext_resource path="res://assets/pear_mask.png" type="Texture" id=2]
 [ext_resource path="res://assets/leaves-arch.png" type="Texture" id=3]
-[ext_resource path="res://assets/banner-scroll-upsidedown.png" type="Texture" id=4]
-[ext_resource path="res://assets/silhouette-man.jpg" type="Texture" id=5]
+[ext_resource path="res://assets/flower-arch.png" type="Texture" id=4]
+[ext_resource path="res://assets/parchemin-png-5.png" type="Texture" id=5]
+[ext_resource path="res://assets/silhouette-man.jpg" type="Texture" id=6]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -73,7 +74,8 @@ rect_min_size = Vector2( 450, 700 )
 mouse_filter = 1
 color = Color( 0.392157, 0.588235, 0.862745, 1 )
 
-[node name="LeavesUp" type="TextureRect" parent="container/ColorRect"]
+[node name="LeavesUpM" type="TextureRect" parent="container/ColorRect"]
+visible = false
 margin_left = -55.5713
 margin_top = -34.8936
 margin_right = 744.429
@@ -82,7 +84,27 @@ rect_scale = Vector2( 0.7, 0.7 )
 rect_clip_content = true
 texture = ExtResource( 3 )
 
+[node name="LeavesUpF" type="TextureRect" parent="container/ColorRect"]
+margin_left = -34.8
+margin_top = -42.9
+margin_right = 700.2
+margin_bottom = 625.1
+rect_scale = Vector2( 0.7, 0.7 )
+rect_clip_content = true
+texture = ExtResource( 4 )
+expand = true
+
 [node name="LeavesLow" type="TextureRect" parent="container/ColorRect"]
+margin_left = 505.739
+margin_top = 709.231
+margin_right = 1305.74
+margin_bottom = 1309.23
+rect_rotation = 180.0
+rect_scale = Vector2( 0.7, 0.7 )
+texture = ExtResource( 3 )
+
+[node name="LeavesLow2" type="TextureRect" parent="container/ColorRect"]
+visible = false
 margin_left = 505.739
 margin_top = 709.231
 margin_right = 1305.74
@@ -95,12 +117,12 @@ texture = ExtResource( 3 )
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -500.0
-margin_top = 400.0
-margin_right = 50.0
-margin_bottom = -50.0
-rect_min_size = Vector2( 550, 300 )
-texture = ExtResource( 4 )
+margin_left = -475.0
+margin_top = 420.0
+margin_right = 25.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 500, 300 )
+texture = ExtResource( 5 )
 expand = true
 
 [node name="vbox" type="VBoxContainer" parent="container"]
@@ -126,7 +148,7 @@ material = SubResource( 4 )
 margin_right = 350.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 350, 375 )
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 expand = true
 stretch_mode = 6
 

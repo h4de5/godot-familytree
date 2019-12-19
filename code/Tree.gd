@@ -10,6 +10,8 @@ var _individuals = []
 var _families = []
 # person of interest
 var poi = null
+# elements to be moved to the center after tree is done
+var move_to_center = []
 
 var level_counts = {}
 
@@ -23,6 +25,8 @@ func _enter_tree():
 		poi.setScale( 1 )
 		poi.setLevel(0)
 		add_child(poi)
+		move_to_center.append(poi)
+
 		renderPartners(poi.uid, 0, 0, 1, 1)
 		renderSiblings(poi.uid, 0, 0, -1)
 
@@ -45,7 +49,7 @@ func _ready():
 
 # funcs used for visualization
 
-func renderBranch(child, parents):
+func renderBranch(child, parents, level):
 #	print("child: ", child.rect_position)
 #	print("father: ", parents[0].rect_position)
 #	print("mother: ", parents[1].rect_position)
@@ -53,6 +57,8 @@ func renderBranch(child, parents):
 	var branch = Branch.instance()
 	branch.setIndividuals(child, parents)
 	add_child(branch)
+	if level == -1:
+		move_to_center.append(branch)
 
 func renderParents(child, level, column = 0):
 	if abs(level) >= config.maxLevel+1:
@@ -88,7 +94,7 @@ func renderParents(child, level, column = 0):
 				renderParents(individual, level-1, newcolumn)
 				# second parent will go to the right
 			side *= -1
-		renderBranch(child, individuals)
+		renderBranch(child, individuals, level)
 
 # not in use
 func renderChildren(id, level):
@@ -116,6 +122,8 @@ func renderPartners(id, level, column, side, scale):
 				individual.setLevel(level)
 				individual.setSwitchSide(side)
 				add_child(individual)
+				if level == 0:
+					move_to_center.append(individual)
 				i += 1
 
 # TODO - branches between partner of siblings
@@ -141,6 +149,9 @@ func renderSiblings(id, level, column, side):
 				# if siblings are rendered, women and man look the other way
 				individual.setSwitchSide(side * -1)
 				add_child(individual)
+				if level == 0:
+					move_to_center.append(individual)
+
 				var partners = renderPartners(individual.uid, level, newcolumn, side, 0.65)
 				# add spaces between partners and next sibling
 				if partners > 0:

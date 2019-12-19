@@ -4,11 +4,22 @@ extends Control
 # var a = 2
 # var b = "text"
 
+var child
+var parents = []
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
-func setIndividuals(child, parents):
+func setIndividuals(_child, _parents):
+	if _child:
+		child = _child
+	if _parents:
+		parents = _parents
+
+	calcPositions()
+
+func calcPositions():
 	var parent_positions = []
 	var child_positions = []
 	var child_box_size
