@@ -86,7 +86,7 @@ func update_tree_size():
 	get_node("Center/VBox").rect_min_size.x = rect.size.x
 	yield(get_tree(),"idle_frame")
 
-	var fontsize = rect.size.x / 45
+	var fontsize = rect.size.x / 40
 	get_node("Center/VBox/Center/Headline").rect_min_size.x = rect.size.x
 	get_node("Center/VBox/Center/Headline").rect_min_size.y = fontsize * 1.1
 	yield(get_tree(),"idle_frame")
