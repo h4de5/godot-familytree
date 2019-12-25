@@ -14,7 +14,7 @@ func _init():
 
 func read_config():
 	var config = ConfigFile.new()
-	var err = config.load("res://settings.cfg")
+	var err = config.load("settings.cfg")
 	if err == OK: # if not, something went wrong with the file loading
 		print("loading settings.cfg")
 		familytreeFilename = config.get_value("familytree", "filename", "Stammbaum.ged")
