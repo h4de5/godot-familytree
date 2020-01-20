@@ -7,7 +7,7 @@ extends Node2D
 
 
 # const Tree = preload("Tree.gd")
-const Tree = preload("res://code/Tree.tscn")
+const Tree = preload("res://src/Tree.tscn")
 #const Parser = preload("parser.gd")
 var tree
 

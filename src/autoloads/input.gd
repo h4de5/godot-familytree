@@ -114,7 +114,7 @@ func _input(event):
 
 			# MUUUUCH EASIER without separete viewport
 			var tree_scene = get_node("/root/main/Center/VBox/TreeContainer/Tree")
-			var headline_scene = get_node("/root/main/Center/VBox/Headline")
+			# var headline_scene = get_node("/root/main/Center/VBox/Center/Headline")
 			# var visible_rect = tree_scene.getBoundaries()
 			var visible_rect = Rect2(get_node("/root/main/Center").rect_position, get_node("/root/main/Center").rect_size)
 
@@ -138,6 +138,8 @@ func _input(event):
 			get_node("/root/main/Camera").position = get_viewport().size / 2
 			get_node("/root/main/Camera").zoom = Vector2(1/factor, 1/factor)
 
+			# get_viewport().queue_screen_capture()
+
 
 			yield(get_tree(),"idle_frame")
 			yield(get_tree(),"idle_frame")
@@ -146,10 +148,18 @@ func _input(event):
 
 			# get screenshot data
 			var image = get_viewport().get_texture().get_data()
-			# flip it because it needs to be flipped
-			image.flip_y()
-			# save it as png
-			image.save_png(filename)
+
+
+			# var image = get_viewport().get_screen_capture()
+
+
+			if image:
+				# flip it because it needs to be flipped
+				image.flip_y()
+				# save it as png
+				image.save_png(filename)
+			else:
+				printerr("image data for screenshot could not be loaded")
 
 			var attack_timer = get_tree().create_timer(2.0)
 			yield(attack_timer, "timeout")
@@ -163,13 +173,13 @@ func _input(event):
 
 
 		if event.scancode == KEY_1:
-			var Screenshot = load("res://code/Screenshot.tscn")
+			var Screenshot = load("res://src/Screenshot.tscn")
 			var screenshot = Screenshot.instance()
 			add_child(screenshot)
 
 			var screenshot_scene = get_node("/root/main/Center")
 			var tree_scene = get_node("/root/main/Center/VBox/TreeContainer/Tree")
-			var headline_scene = get_node("/root/main/Center/VBox/Headline")
+			var headline_scene = get_node("/root/main/Center/VBox/Center/Headline")
 			var poi_uid = tree_scene.poi.uid
 
 			var rect = tree_scene.getBoundaries()

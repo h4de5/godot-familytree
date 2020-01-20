@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://code/Individual.gd" type="Script" id=1]
+[ext_resource path="res://src/Individual.gd" type="Script" id=1]
 [ext_resource path="res://assets/pear_mask.png" type="Texture" id=2]
 [ext_resource path="res://assets/leaves-arch.png" type="Texture" id=3]
 [ext_resource path="res://assets/flower-arch.png" type="Texture" id=4]
-[ext_resource path="res://assets/parchemin-png-5.png" type="Texture" id=5]
+[ext_resource path="res://assets/parchemin.png" type="Texture" id=5]
 [ext_resource path="res://assets/silhouette-man.jpg" type="Texture" id=6]
 
 [sub_resource type="Shader" id=1]

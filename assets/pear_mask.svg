@@ -45,16 +45,17 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="449.28409"
-     inkscape:cy="782.01106"
+     inkscape:cx="202.43889"
+     inkscape:cy="206.91838"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="svg8"
      showgrid="false"
      inkscape:window-width="2560"
      inkscape:window-height="1373"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -63,27 +64,26 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <path
+     style="opacity:1;stroke-width:0.99999994;filter:url(#filter4002)"
+     d="m 379.81641,174.99609 c -87.03051,9.8e-4 -157.58203,83.29865 -157.58203,157.58399 0,156.1077 -0.15949,157.583 157.58203,157.58398 157.74152,9.8e-4 157.58398,-0.46567 157.58398,-157.58398 0,-74.2858 -70.55271,-157.58409 -157.58398,-157.58399 z"
+     transform="matrix(0.26458333,0,0,0.26458333,-57.598726,166.10998)"
+     id="pear_mask"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cczcc"
+     inkscape:export-xdpi="96"
+     inkscape:export-ydpi="96">
+    <desc
+       id="desc3720">pear_mask</desc>
+    <title
+       id="title3718">pear_mask</title>
+  </path>
   <g
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
-     id="layer1">
-    <path
-       style="opacity:1;stroke-width:0.99999994;filter:url(#filter4002)"
-       d="m 379.81641,174.99609 c -87.03051,9.8e-4 -157.58203,83.29865 -157.58203,157.58399 0,156.1077 -0.15949,157.583 157.58203,157.58398 157.74152,9.8e-4 157.58398,-0.46567 157.58398,-157.58398 0,-74.2858 -70.55271,-157.58409 -157.58398,-157.58399 z"
-       transform="scale(0.26458333)"
-       id="pear_mask"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cczcc"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
-      <desc
-         id="desc3720">pear_mask</desc>
-      <title
-         id="title3718">pear_mask</title>
-    </path>
-  </g>
+     id="layer1" />
 </svg>

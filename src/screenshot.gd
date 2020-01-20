@@ -73,6 +73,7 @@ func capture(filename = "screenshot.png"):
 
 	# take screenshot from viewport
 	var image = viewport.get_texture().get_data()
+
 	# flip it because it needs to be flipped
 	image.flip_y()
 	# save it as png

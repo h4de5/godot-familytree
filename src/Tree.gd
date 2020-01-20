@@ -2,9 +2,9 @@ extends Control
 
 #const Individual = preload("Individual.gd")
 #const Family = preload("Family.gd")
-const Individual = preload("res://code/Individual2.tscn")
-const Family = preload("res://code/Family.tscn")
-const Branch = preload("res://code/Branch.tscn")
+const Individual = preload("res://src/Individual2.tscn")
+const Family = preload("res://src/Family.tscn")
+const Branch = preload("res://src/Branch.tscn")
 
 var _individuals = []
 var _families = []
@@ -181,7 +181,7 @@ func getFreePosition(level, childcolumn = 0, parentmax = [0,0], side = 0):
 	level_counts['level'+str(level)].append(column)
 	return column
 
-
+#
 func calcPosition(level, column):
 	# level is y position of the node
 	var margin_width = 0
@@ -302,13 +302,20 @@ func getMaxRightLeft(uid, level = 0, side = 0):
 #					leftest = min(leftest,maxrightleft[0] - maxrightleft[1] + parent_side)
 					rightest = max(rightest,maxrightleft[1] - maxrightleft[0] + parent_side)
 
+
 			parent_side *= -1
 
 	var siblings = findSiblings(uid)
 	if side == -1 and siblings.size() * -1 < leftest:
+		print("level: ", level, "leftest old: ", leftest)
 		leftest = min(siblings.size() * -1, leftest)
+		print("leftest new: ", leftest)
+
+
 	if side == 1 and siblings.size() > rightest:
+		print("level: ", level, "rightest old: ", rightest)
 		rightest = max(siblings.size(), rightest)
+		print("rightest new: ", rightest)
 
 	return [leftest,rightest]
 
