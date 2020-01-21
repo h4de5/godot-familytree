@@ -307,13 +307,13 @@ func getMaxRightLeft(uid, level = 0, side = 0):
 
 	var siblings = findSiblings(uid)
 	if side == -1 and siblings.size() * -1 < leftest:
-		print("level: ", level, "leftest old: ", leftest)
-		leftest = min(siblings.size() * -1, leftest)
+		print("level: ", level, " leftest old: ", leftest)
+		leftest = min(siblings.size() * -1, leftest) - 5
 		print("leftest new: ", leftest)
 
 
 	if side == 1 and siblings.size() > rightest:
-		print("level: ", level, "rightest old: ", rightest)
+		print("level: ", level, " rightest old: ", rightest)
 		rightest = max(siblings.size(), rightest)
 		print("rightest new: ", rightest)
 
