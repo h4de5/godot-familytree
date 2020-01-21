@@ -62,16 +62,19 @@ func update_tree_size():
 	var moving_by = 0
 
 	if tree_node.move_to_center.size():
+		print("correcting ", tree_node.move_to_center.size(), " elements")
 		for node in tree_node.move_to_center:
-			if node is preload("Individual.gd"):
+			if node is preload("res://src/Individual.gd"):
+#				print("moving Individual ", node.personname)
 				if moving_by == 0:
 					moving_by = rect.size.x/2 - node.rect_position.x + rect.position.x
 				node.rect_position.x += moving_by
-			if node is preload("Branch.gd"):
+			elif node is preload("res://src/Branch.gd"):
+#				print("moving branch ", node.parents)
 				yield(get_tree(),"idle_frame")
 				node.setIndividuals(null, null)
-
-
+#			else:
+#				print("moving unknown node ", node.name)
 
 	print("calculated rect size: ", rect.size)
 	print("calculated rect position: ", rect.position.abs())
@@ -86,7 +89,7 @@ func update_tree_size():
 	get_node("Center/VBox").rect_min_size.x = rect.size.x
 	yield(get_tree(),"idle_frame")
 
-	var fontsize = rect.size.x / 40
+	var fontsize = max(rect.size.x / 40, 150)
 	get_node("Center/VBox/Center/Headline").rect_min_size.x = rect.size.x
 	get_node("Center/VBox/Center/Headline").rect_min_size.y = fontsize * 1.1
 	yield(get_tree(),"idle_frame")
@@ -110,8 +113,9 @@ func update_tree_size():
 	get_node("Center/Background").rect_min_size = rect.grow(200).grow_individual(0, fontsize*2, 0, 0 ).size
 	yield(get_tree(),"idle_frame")
 
-	get_node("Center/VBox/Center").rect_position = rect.position
-	yield(get_tree(),"idle_frame")
+	#get_node("Center/VBox/Center").rect_position = rect.position
+	#get_node("Center/VBox/Center").rect_position = Vector2(0,0)
+	#yield(get_tree(),"idle_frame")
 
 	get_node("Center/VBox/TreeContainer").rect_min_size = rect.size
 	yield(get_tree(),"idle_frame")
