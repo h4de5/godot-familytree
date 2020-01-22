@@ -34,3 +34,18 @@ jobs:
         godot_template_version: 3.1.2.stable
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    # upload generated exports to another server
+    - name: Check Exports Job
+      run: |
+        ls -la /home/runner/.local/share/godot/builds/
+    - name: Upload Exports Job
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.UPLOAD_HOST }}
+        username: ${{ secrets.UPLOAD_USER }}
+        password: ${{ secrets.UPLOAD_PASS }}
+        port: ${{ secrets.UPLOAD_PORT }}
+        source: "/home/runner/.local/share/godot/builds/1/"
+        target: "/volume1/development/workspace/godot-familytree/dist/"
+        strip_components: 7
