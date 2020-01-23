@@ -10,7 +10,11 @@ extends Node
 
 
 func file_prepare(tree):
-	loadfile(tree, config.familytreeFilename, config.familytreeDirectory, config.familytreeServer)
+	if config.familytreeFilename and config.familytreeFilename.length():
+		loadfile(tree, config.familytreeFilename, config.familytreeDirectory, config.familytreeServer)
+	else:
+		# if no family tree filename is given - generate simple tree
+		file_ready(tree, "")
 
 
 func loadfile(tree, familytreeFilename : String, familytreeDirectory : String, familytreeServer: String):

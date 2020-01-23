@@ -3,7 +3,6 @@
 [ext_resource path="res://src/Branch.gd" type="Script" id=1]
 [ext_resource path="res://assets/antler.jpg" type="Texture" id=2]
 
-
 [node name="Branch" type="Control"]
 script = ExtResource( 1 )
 

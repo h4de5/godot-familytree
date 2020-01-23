@@ -25,13 +25,22 @@ func _enter_tree():
 		poi.setScale( 1 )
 		poi.setLevel(0)
 		add_child(poi)
+		# elements, that should be moved to the center of the tree
+		# after alle other elements has been placed
 		move_to_center.append(poi)
 
+		# partner of poi goes to the right
+		# renderPartners(id, level, column, side, scale):
 		renderPartners(poi.uid, 0, 0, 1, 1)
+
+		# siblings of poit goes to the left
+		# renderSiblings(id, level, column, side):
 		renderSiblings(poi.uid, 0, 0, -1)
 
 		level_counts['level0'] = [0]
 
+		# render parents and grandparents
+		# renderParents(child, level, column = 0):
 		renderParents(poi, -1)
 
 func _exit_tree():
@@ -42,6 +51,8 @@ func _exit_tree():
 		# get_child(i).queue_free()
 		remove_child(get_child(i))
 	level_counts = {}
+	move_to_center = []
+	rect_position = Vector2(0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -96,17 +107,6 @@ func renderParents(child, level, column = 0):
 			side *= -1
 		renderBranch(child, individuals, level)
 
-# not in use
-func renderChildren(id, level):
-	var individuals = findChildren(id)
-	if individuals:
-		for individual in individuals:
-			if individual:
-				individual.setPosition( getFreePosition(level) )
-				individual.setLevel(level)
-				add_child(individual)
-				renderChildren(individual.uid, level+1)
-
 func renderPartners(id, level, column, side, scale):
 	var individuals = findPartners(id)
 	var i = 1
@@ -124,7 +124,19 @@ func renderPartners(id, level, column, side, scale):
 				add_child(individual)
 				if level == 0:
 					move_to_center.append(individual)
+
+				# children are always coming from the individual in the tree
+				# therefor we could spare this information,
+				# and only show the link from which partner (who is on the tree) the kid is
+				# TODO
+				# right now only for POI kids
+				# maybe limit it to individual.uid AND current id (otherwise kids brought to the marrage are also listed)
+				# if level == 0:
+				#	renderChildren(individual.uid, level+1, newcolumn, side)
+
 				i += 1
+
+
 
 # TODO - branches between partner of siblings
 #		var family = individuals.duplicate()
@@ -132,6 +144,23 @@ func renderPartners(id, level, column, side, scale):
 #		renderBranch(null, family)
 
 	return i-1
+
+func renderChildren(id, level, column, side):
+	var individuals = findChildren(id)
+	if individuals:
+		var i = 1
+		for individual in individuals:
+			if individual:
+				var newcolumn = getFreePosition(level, column+ i * side, [0,0], 0)
+
+				individual.setPosition( calcPosition(level,  newcolumn) )
+				individual.setScale( 0.65 )
+				individual.setLevel(level)
+				add_child(individual)
+				if level == 0:
+					move_to_center.append(individual)
+				#renderChildren(individual.uid, level+1)
+				i += 1
 
 func renderSiblings(id, level, column, side):
 	var individuals = findSiblings(id)
@@ -247,7 +276,8 @@ func setFamilyField(index, field, value):
 func addIndividual(id, personname, birth, death, occupation, location, gender):
 #	var node = Individual.new();
 	var node = Individual.instance();
-	node.node_init(id, personname, birth, death, occupation, location, gender, '..\\icon.png', '..')
+	#node.node_init(id, personname, birth, death, occupation, location, gender, '..\\icon.png', '..')
+	node.node_init(id, personname, birth, death, occupation, location, gender, '', '')
 	_individuals.append(node)
 	return _individuals.size()-1
 
