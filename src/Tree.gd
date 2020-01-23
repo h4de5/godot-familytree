@@ -131,8 +131,8 @@ func renderPartners(id, level, column, side, scale):
 				# TODO
 				# right now only for POI kids
 				# maybe limit it to individual.uid AND current id (otherwise kids brought to the marrage are also listed)
-				if level == 0:
-					renderChildren(individual.uid, level+1, newcolumn, side)
+				# if level == 0:
+				#	renderChildren(individual.uid, level+1, newcolumn, side)
 
 				i += 1
 
@@ -276,7 +276,8 @@ func setFamilyField(index, field, value):
 func addIndividual(id, personname, birth, death, occupation, location, gender):
 #	var node = Individual.new();
 	var node = Individual.instance();
-	node.node_init(id, personname, birth, death, occupation, location, gender, '..\\icon.png', '..')
+	#node.node_init(id, personname, birth, death, occupation, location, gender, '..\\icon.png', '..')
+	node.node_init(id, personname, birth, death, occupation, location, gender, '', '')
 	_individuals.append(node)
 	return _individuals.size()-1
 

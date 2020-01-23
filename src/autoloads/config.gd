@@ -17,7 +17,8 @@ func read_config():
 	var err = config.load("settings.cfg")
 	if err == OK: # if not, something went wrong with the file loading
 		print("loading settings.cfg")
-		familytreeFilename = config.get_value("familytree", "filename", "Stammbaum.ged")
+		#familytreeFilename = config.get_value("familytree", "filename", "Stammbaum.ged")
+		familytreeFilename = config.get_value("familytree", "filename", "")
 		familytreeDirectory = config.get_value("familytree", "directory", "_familytree/")
 		familytreeServer = config.get_value("familytree", "server", "")
 		personOfInterest = config.get_value("familytree", "poi", "I1")
