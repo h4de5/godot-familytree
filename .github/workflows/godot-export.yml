@@ -43,4 +43,5 @@ jobs:
       run: |
         ls -la /home/runner/.local/share/godot/builds/1
         # sudo apt -yq install rsync openssh-client sshpass
+        # upload only web build to preview web server
         rsync -vv /home/runner/.local/share/godot/builds/1/* --rsync-path="/bin/rsync" --port="${{ secrets.UPLOAD_PORT }}" --rsh="/usr/bin/sshpass -p ${{ secrets.UPLOAD_PASS }} ssh -o StrictHostKeyChecking=no -l ${{ secrets.UPLOAD_USER }} -p ${{ secrets.UPLOAD_PORT }}" ${{ secrets.UPLOAD_USER }}@${{ secrets.UPLOAD_HOST }}:${{ secrets.UPLOAD_PATH }}
