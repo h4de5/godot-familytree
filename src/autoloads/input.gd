@@ -172,35 +172,35 @@ func _input(event):
 
 
 
-		if event.scancode == KEY_1:
-			var Screenshot = load("res://src/Screenshot.tscn")
-			var screenshot = Screenshot.instance()
-			add_child(screenshot)
-
-			var screenshot_scene = get_node("/root/main/Center")
-			var tree_scene = get_node("/root/main/Center/VBox/TreeContainer/Tree")
-			var headline_scene = get_node("/root/main/Center/VBox/Center/Headline")
-			var poi_uid = tree_scene.poi.uid
-
-			var rect = tree_scene.getBoundaries()
-			print("tree boundaries: ", rect)
-
-			print("headline boundaries: ", Rect2(headline_scene.rect_position, headline_scene.rect_size))
-			rect.merge(Rect2(headline_scene.rect_position, headline_scene.rect_size))
-
-			print("tree inlcuding headline: ", rect)
-
-			screenshot.prepare(screenshot_scene, rect, get_viewport(), get_tree(), config.outputFactor)
+#		if event.scancode == KEY_1:
+#			var Screenshot = load("res://src/Screenshot.tscn")
+#			var screenshot = Screenshot.instance()
+#			add_child(screenshot)
 #
-			yield(get_tree(),"idle_frame")
-			yield(get_tree(),"idle_frame")
-###			get_tree().change_scene_to(Screenshot)
+#			var screenshot_scene = get_node("/root/main/Center")
+#			var tree_scene = get_node("/root/main/Center/VBox/TreeContainer/Tree")
+#			var headline_scene = get_node("/root/main/Center/VBox/Center/Headline")
+#			var poi_uid = tree_scene.poi.uid
+#
+#			var rect = tree_scene.getBoundaries()
+#			print("tree boundaries: ", rect)
+#
+#			print("headline boundaries: ", Rect2(headline_scene.rect_position, headline_scene.rect_size))
+#			rect.merge(Rect2(headline_scene.rect_position, headline_scene.rect_size))
+#
+#			print("tree inlcuding headline: ", rect)
+#
+#			screenshot.prepare(screenshot_scene, rect, get_viewport(), get_tree(), config.outputFactor)
 ##
-			#screenshot.capture(config.outputDirectory +  "/familyTree-"+ config.personOfInterest + ".png")
-			screenshot.capture(config.outputDirectory +  "/familytree-"+ poi_uid + ".png")
-
-#			get_parent().remove_child(screenshot)
-			screenshot.cleanup()
+#			yield(get_tree(),"idle_frame")
+#			yield(get_tree(),"idle_frame")
+####			get_tree().change_scene_to(Screenshot)
+###
+#			#screenshot.capture(config.outputDirectory +  "/familyTree-"+ config.personOfInterest + ".png")
+#			screenshot.capture(config.outputDirectory +  "/familytree-"+ poi_uid + ".png")
+#
+##			get_parent().remove_child(screenshot)
+#			screenshot.cleanup()
 
 #			get_tree().change_scene("/root/main")
 

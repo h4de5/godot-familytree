@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v1
       - name: export game
         # Use version 1.0.0 (see releases for all versions)
-        uses: firebelley/godot-export@v1.1.0
+        uses: firebelley/godot-export@v1.2.0
         with:
           # Base version. Patch versions are incremented when this action runs.
           base_version: 0.0.1
