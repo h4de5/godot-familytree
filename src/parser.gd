@@ -51,6 +51,7 @@ func loadfile(tree, familytreeFilename : String, familytreeDirectory : String, f
 #		return filebody
 
 
+#warning-ignore-all:unused_variable
 func loadfile_return(result, response_code, headers, body, params = []):
 	#disconnect("request_completed", self, "_on_request_completed")
 	if result == HTTPRequest.RESULT_SUCCESS and response_code == HTTPClient.RESPONSE_OK:

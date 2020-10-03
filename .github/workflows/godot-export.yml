@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: get current IP
         run: |
-          curl -q ip.icb.at
+          curl -s ip.icb.at
         # Always include the checkout step so that
         # your project is available for Godot to export
       - name: checkout

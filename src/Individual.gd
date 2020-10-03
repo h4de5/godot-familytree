@@ -158,6 +158,7 @@ func getTexture(path, imagename):
 # general request completion information
 # use this func signature for callback methods
 # call this func to get response
+#warning-ignore-all:unused_variable
 func on_request_completed(result, response_code, headers, body, params = []):
 	#disconnect("request_completed", self, "_on_request_completed")
 	if result == HTTPRequest.RESULT_SUCCESS and response_code == HTTPClient.RESPONSE_OK:

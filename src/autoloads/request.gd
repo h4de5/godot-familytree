@@ -138,8 +138,9 @@ func _buildquery(url, query):
 	return result
 
 # removes self from tree
+#warning-ignore-all:unused_variable
 func _remove_node(result, response_code, headers, body, request):
 	if request:
-#		print("http node removed..", "code: ", response_code, " ", request)
+		# print_debug("http node removed..", "code: ", response_code, " ", request)
 		requests.remove(requests.find(request))
 		request.queue_free()
