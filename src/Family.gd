@@ -1,8 +1,8 @@
 extends Control
 
-var fid = ""
-var husband = ""
-var wife = ""
+var fid: String = ""
+var husband: String = ""
+var wife: String = ""
 var children = []
 var date = ""
 var location = ""
@@ -16,7 +16,7 @@ func _ready():
 
 # funcs used for building upfamilytree data
 
-func node_init(_fid, _husband, _wife, _children, _date, _location):
+func node_init(_fid: String, _husband: String, _wife: String, _children, _date, _location):
 	self.fid = _fid
 	self.husband = _husband
 	self.wife = _wife

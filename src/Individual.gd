@@ -11,7 +11,12 @@ var image = ""
 var imagepath = ""
 
 
+# at what level (seen from poi) this individual is (-1 parent, +1 is child)
 var level = 0
+# how many ancestor levels this individual has
+var ancestors = 0
+# how many descendants levels this individual has
+var descendants = 0
 var color = Color(0,0,0,0)
 var silhouette = 'silhouette-man.jpg'
 # if usualle man are left and woman are right, therefor silhouetts look at each other
@@ -148,8 +153,13 @@ func getTexture(path, imagename):
 			var _file = File.new()
 			var doFileExists = _file.file_exists(filename)
 			if doFileExists:
+				var img = Image.new()
+				var tex = ImageTexture.new()
+				img.load(filename)
+				tex.create_from_image(img)
+				return tex
 #				print("loading file: "+ filename)
-				return load(filename)
+#				return load(filename)
 			else:
 				print("file not found: "+ filename)
 	return null
@@ -163,13 +173,13 @@ func on_request_completed(result, response_code, headers, body, params = []):
 	#disconnect("request_completed", self, "_on_request_completed")
 	if result == HTTPRequest.RESULT_SUCCESS and response_code == HTTPClient.RESPONSE_OK:
 
-		var image = Image.new()
-		var image_error = image.load_jpg_from_buffer(body)
+		var imageObj = Image.new()
+		var image_error = imageObj.load_jpg_from_buffer(body)
 		if image_error != OK:
 			printerr("An error occurred while trying to display the image.")
 
 		var texture = ImageTexture.new()
-		texture.create_from_image(image)
+		texture.create_from_image(imageObj)
 
 		setImage(texture)
 
@@ -194,7 +204,7 @@ func getNameFormated(trim = true):
 	var lastname
 	var firstname
 
-	if nameparts[1] != '...':
+	if len(nameparts) > 1 and nameparts[1] != '...':
 		lastname = nameparts[1].strip_edges().capitalize() + "\n"
 	else:
 		lastname = ''

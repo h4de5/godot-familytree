@@ -53,7 +53,8 @@ func setPersonOfInterest(uid):
 
 func update_tree_size():
 
-
+	
+#	# TODO - need to be activated later again - tr
 	var rect = tree.getBoundaries()
 
 	var tree_node = get_node("Center/VBox/TreeContainer/Tree")
