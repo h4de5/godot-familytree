@@ -406,7 +406,7 @@ func listFamilies():
 	for node in _families:
 		print(node.to_string())
 
-func to_string(node):
+func to_string(node = null):
 	if node == null:
 		return null
 	elif node is Array:
