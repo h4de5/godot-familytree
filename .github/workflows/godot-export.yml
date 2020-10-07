@@ -30,16 +30,16 @@ jobs:
           # The download url of the 64 bit Linux Headless Godot executable
           # godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.1.2/Godot_v3.1.2-stable_linux_headless.64.zip
           # godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.2/rc2/Godot_v3.2-rc2_linux_headless.64.zip
-          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.2/Godot_v3.2-stable_linux_headless.64.zip
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_linux_headless.64.zip
           # The url of the export templates corresponding to the Godot executable version
           # godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.1.2/Godot_v3.1.2-stable_export_templates.tpz
           # godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.2/rc2/Godot_v3.2-rc2_export_templates.tpz
-          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.2/Godot_v3.2-stable_export_templates.tpz
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_export_templates.tpz
           # The relative path containing the "project.godot" file
           relative_project_path: ./
           # The name of the folder which templates are stored in. Looks like '3.1.1.stable.mono'. Can be found at %APPDATA\Roaming\Godot\templates on Windows and ~/.local/share/godot/templates on Linux.
           #godot_template_version: 3.1.2.stable
-          godot_template_version: 3.2.stable
+          godot_template_version: 3.2.3.stable
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
