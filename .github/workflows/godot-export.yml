@@ -20,10 +20,13 @@ jobs:
         # Always include the checkout step so that
         # your project is available for Godot to export
       - name: checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.3.1
+        with:
+          fetch-depth: 0
       - name: export game
         # Use version 1.0.0 (see releases for all versions)
-        uses: firebelley/godot-export@v1.2.0
+        # see: https://github.com/firebelley/godot-export
+        uses: firebelley/godot-export@v2.4.0
         with:
           # Base version. Patch versions are incremented when this action runs.
           base_version: 0.0.1
@@ -40,6 +43,9 @@ jobs:
           # The name of the folder which templates are stored in. Looks like '3.1.1.stable.mono'. Can be found at %APPDATA\Roaming\Godot\templates on Windows and ~/.local/share/godot/templates on Linux.
           #godot_template_version: 3.1.2.stable
           godot_template_version: 3.2.3.stable
+          export_debug: false
+          archive_export_output: true
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
