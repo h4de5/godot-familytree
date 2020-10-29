@@ -26,7 +26,7 @@ jobs:
       - name: export game
         # Use version 1.0.0 (see releases for all versions)
         # see: https://github.com/firebelley/godot-export
-        uses: firebelley/godot-export@v2.4.0
+        uses: firebelley/godot-export@v2.5.0
         with:
           # Base version. Patch versions are incremented when this action runs.
           base_version: 0.0.1
